@@ -8,38 +8,18 @@ function Login(props){
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [showerror, setError] = useState(false);
-	const [showMsg, setMsg] = useState(false);
+	// const [showerror, setError] = useState(false);
+	// const [showMsg, setMsg] = useState(false);
 
 	const login = () => {
-		console.log('email ',email);
-        console.log('password ',password);   
-        props.history.push('/details');
-		axios.post('login', {name:email, password:password})
+		axios.post('/user/login', {name:email, password:password})
 		.then(function(response) {
-            console.log('response ',response.data);
-            
-		// 	if(response.data == null){
-		// 		setError(true);
-		// 	}else{
-		// 	if(response.data.success == false){setMsg(true); setError(false); }
-		// 	if(response.data.success == true){ 
-		// 		console.log('go to dashboard' );
-		// 		setError(false);
-		// 		setMsg(false);
-		// 		localStorage.setItem('token', response.data.token);
-		// 		localStorage.setItem('id', response.data.id);
-		// 		localStorage.setItem('firstname', response.data.result.firstname);
-		// 		axios.defaults.headers.common['Authorization'] = response.data.token;
-
-		// 		props.history.push('/dashboard');
-
-		// 	}
-		// }
+			localStorage.setItem('token',response.data.token);
+			localStorage.setItem('id',response.data.id);
+			props.history.push('/dashboard');
         }).catch(function (error) {
             console.log('error ',error);
         });     
-
     }
 
      return (
@@ -75,8 +55,8 @@ function Login(props){
 					<button type="button" className="btn login_btn" onClick={() => { login() }}>Login</button>
 				</div>
 				
-				{ showerror ? <span className="error_class">Invalid Email</span> : null }
-					{ showMsg ? <span className="error_class">Invalid Password</span> : null }
+				{/* { showerror ? <span className="error_class">Invalid Email</span> : null }
+					{ showMsg ? <span className="error_class">Invalid Password</span> : null } */}
 				<div className="mt-4">
 					<div className="d-flex justify-content-center links">
 						<a href="#">Forgot your password?</a>
