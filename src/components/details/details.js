@@ -56,6 +56,10 @@ function Details(props){
         setInputs({...inputs, [name]: value})
       }
 
+      const submit = () => {
+
+      }
+
      return (
         <React.Fragment>
             <form class="form">
@@ -88,13 +92,17 @@ function Details(props){
                 <label class="col-5">Time of Registration : </label>
                 <input class="col-7" type="date" name="regTime" value={inputs.regTime} onChange={handleInputChange}/>
                 </div>
-                <div class="w-50">
+                <div class="w-50 row mr-0">
                 <label class="col-5">Police Station :  </label>
-                <input class="col-7" type="text" name="policeStation" value={inputs.policeStation} onChange={handleInputChange}/>            
+                <div class="col-7 pd-0">
+                    <Select  name="policeStation" value={policeStation} onChange={e => setPoliceStation(e)} options={options}/>
+                </div>
+
+                {/* <input class="col-7" type="text" name="policeStation" value={inputs.policeStation} onChange={handleInputChange}/>             */}
                 </div>
                 </div>
 
-                <div class="row mr5">
+                {/* <div class="row mr5">
                 <div class="w-50 pdr-10">
                 <label class="col-5">Court :  </label>
                 <input class="col-7" type="text" name="court" value={inputs.court} onChange={handleInputChange}/>
@@ -103,13 +111,30 @@ function Details(props){
                 <label class="col-5">Judge :  </label>
                 <input class="col-7" type="text" name="judge" value={inputs.judge} onChange={handleInputChange}/>            
                 </div>
+                </div> */}
+
+
+                <div class="row mr5">
+                <div class="w-50 row mr-0">
+                    <label class="col-5">Court :</label>
+                    <div class="col-7 pd-0 mrl-5">
+                    <Select  name="court" value={court} onChange={e => setCourt(e)} options={options}/>
+                    </div>
+                </div>
+
+                <div class="w-50 row mr-0">
+                    <label class="col-5">Judge :</label>
+                    <div class="col-7 pd-0">
+                    <Select  name="judge" value={judge} onChange={e => setJudge(e)} options={options}/>
+                    </div>
+                </div>
                 </div>
                 </div>
 
                 <div class="row mr5">
                 <div class="w-50">
                     <label class="col-5 pdl-0">Complaint</label>
-                    <textarea class="col-7 mrl-4" name="complaint" value={inputs.complaint} onChange={handleInputChange} />
+                    <textarea class="col-7 mrl-5" name="complaint" value={inputs.complaint} onChange={handleInputChange} />
                 </div>
 
                 <div class="w-50">
@@ -121,7 +146,7 @@ function Details(props){
                 <div class="row mr5">
                 <div class="w-50">
                     <label class="col-5 pdl-0">Hearing Date</label>
-                    <input type="date" class="col-7 mrl-4" name="hearingDate" value={inputs.hearingDate} onChange={handleInputChange}/>
+                    <input type="date" class="col-7 mrl-5" name="hearingDate" value={inputs.hearingDate} onChange={handleInputChange}/>
                 </div>
 
                 <div class="w-50 row mr-0">
@@ -137,7 +162,7 @@ function Details(props){
                 <div class="row mr5">
                 <div class="w-50 row mr-0">
                     <label class="col-5">Forensic</label>
-                    <div class="col-7 pd-0">
+                    <div class="col-7 pd-0 mrl-5">
                     <Select  name="forensic" value={forensic} onChange={e => setForensic(e)} options={options}/>
                     </div>
                 </div>
@@ -156,7 +181,7 @@ function Details(props){
                 <div class="row mr5">
                 <div class="w-50 row mr-0">
                     <label class="col-5">CA Report</label>
-                    <div class="col-7 pd-0">
+                    <div class="col-7 pd-0 mrl-5">
                     <Select  name="CA" value={ca} onChange={e => setCA(e)} options={options}/>
                     </div>
                 </div>
@@ -172,8 +197,8 @@ function Details(props){
                 <div class="row mr5">
                 <div class="w-50 row mr-0">
                     <label class="col-5">Handwriting Report</label>
-                    <div class="col-7 pd-0">
-                    <Select  name="handwritingReport" value={handwritingReport} onChange={e => setHandwritingReport} options={options}/>
+                    <div class="col-7 pd-0 mrl-5">
+                    <Select  name="handwritingReport" value={handwritingReport} onChange={e => setHandwritingReport(e)} options={options}/>
                     </div>
                 </div>
                 </div>
@@ -200,6 +225,10 @@ function Details(props){
                 </div>
 
                 </div>
+
+                <div class="d-flex justify-content-center mt-3 login_container">
+					<button type="button" class="btn login_btn" onClick={() => { submit() }}>Submit</button>
+				</div>
             </form>
         </React.Fragment>
      );
