@@ -8,6 +8,7 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import { DatePicker } from 'antd';
+import * as moment from 'moment';
 
 
 class Dashboard extends Component{
@@ -15,7 +16,6 @@ class Dashboard extends Component{
     constructor(){
         super();
         this.state = {
-            username : '',
             cctns_no : '',
             date : '',
             courtArray: [],
@@ -39,19 +39,7 @@ class Dashboard extends Component{
             }
         });
     }
-   
-
-    // userList = () =>{
-    //     axios.get('userlist')
-    //     .then((response) =>{
-    //         //console.log(response)
-    //         this.setState({userArray: response.data});
-    //     })
-    //     .catch((err) =>{
-    //         console.log(err)
-    //     });
-    // }
-
+ 
     logout = ()=>{
         localStorage.removeItem('token');
         localStorage.removeItem('id');
@@ -59,7 +47,47 @@ class Dashboard extends Component{
     }
 
     changeDatepickerValue = (date, dateString) =>  {
-        console.log(dateString);
+        this.setState({
+            date : dateString
+        })
+    }
+
+    handleForm = (event) =>{
+        this.setState({
+            [event.target.name] : event.target.value
+        })
+    }
+
+    searchClick = (event)=>{
+        const postData = {
+            cctns_no : this.state.cctns_no,
+            created : this.state.date
+        }
+        axios.post('/court/filter',postData,{
+            "headers": {
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        })
+        .then((response) =>{
+            //console.log(response)
+            this.setState({courtArray: response.data});
+            this.setState({cctns_no : ""})
+        })
+        .catch((err) =>{
+            this.props.history.push('/')
+        })
+    }
+
+    refesh = (e) =>{
+        this.getAllList();
+    }
+
+    chengedate = (date) => {
+        if(date !== '' && date !== null){
+            let newdate = moment(date, 'YYYY-MM-DD').format();
+            let latestDate = newdate.split("T");
+            return latestDate[0];
+        }
     }
 
     render(){
@@ -69,12 +97,6 @@ class Dashboard extends Component{
             marginTop: '1rem',
         };
 
-        const imageStyle = {
-            height: '150px',
-            width: '170px',
-        }
-
-       
         //Court List Data
         const courtarray = this.state.courtArray;
         const courtListArray = courtarray.map((court, i)=>{
@@ -82,39 +104,36 @@ class Dashboard extends Component{
                 <div key={i} className="rowDiv">
                     <div className="cellDiv">{courtarray[i].cctns_no}</div>
                     <div className="cellDiv">{courtarray[i].fir_no}</div>
-                    <div className="cellDiv">{courtarray[i].date_of_registration}</div>
+                    <div className="cellDiv">{this.chengedate(courtarray[i].date_of_registration)}</div>
                     <div className="cellDiv">
-                        <Link  to={`/editDetail/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/editDetail/${courtarray[i]._id}`}>Edit</Link>
+                        <Link  to={`/view/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/edit/${courtarray[i]._id}`}>Edit</Link>
                     </div>
                 </div>
             )
         });
 
-        
         return(
             <div>
-                  <Menu name={this.state.username} logout={this.logout}/>
+                  <Menu logout={this.logout}/>
                     <Container>
                         <br/>
-                        <div><h3></h3></div>
                         <Row alignItems="start">
                             
                             <Col></Col>
                             <Col>
-                                <input type="text" className="form-control input_user" name="cctns"  placeholder="CCTNS No"/>
+                                <input type="text" value={this.cctns_no} onChange={this.handleForm} className="form-control input_user" name="cctns_no"  placeholder="CCTNS No"/>
                             </Col>
                             <Col>
                                 <DatePicker onChange={this.changeDatepickerValue} />
                             </Col>
                             <Col>
-                                <Button primary as="input" type="submit" value="Search" />
+                                <Button primary as="input" onClick={e => this.searchClick(e)} type="submit" value="Search" />
+                                <span> <Button primary as="input" onClick={e => this.refesh(e)} type="submit" value="Refresh" /></span>
                             </Col>
                             <Col></Col>
                         </Row>
                         <br/>
                         <br/>
-                        <div><h3></h3></div>
-
                         <Row style={rowStyle2} alignItems="start">
                             <Col >
                             <div className="containerDiv">
