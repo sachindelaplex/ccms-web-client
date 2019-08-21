@@ -1,3 +1,6 @@
+body {
+    line-height: 2.2;
+}
 .form{
     width: 1000px;
     margin: 5% auto;
@@ -10,4 +13,20 @@
 
 .pdr-10{
     padding-right: 10px;
+}
+
+.pdl-0{
+    padding-left: 0px;
+}
+
+.mrl-4{
+    margin-left: -4px;
+}
+
+.pd-0{
+    padding: 0px;
+}
+
+.mr-0{
+    margin: 0px;
 }
