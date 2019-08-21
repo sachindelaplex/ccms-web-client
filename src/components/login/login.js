@@ -12,14 +12,13 @@ function Login(props){
 	const [showMsg, setMsg] = useState(false);
 
 	const login = () => {
-
 		console.log('email ',email);
         console.log('password ',password);   
-       
+        props.history.push('/details');
 		axios.post('login', {name:email, password:password})
 		.then(function(response) {
             console.log('response ',response.data);
-            // props.history.push('/details');
+            
 		// 	if(response.data == null){
 		// 		setError(true);
 		// 	}else{

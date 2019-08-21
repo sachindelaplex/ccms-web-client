@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './details.css';
 import axios from 'axios';
 
-const Details = (props) => {   
+function Details(props){   
 
     console.log('details page');
     const [inputs, setInputs] = useState({});
