@@ -1,19 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Route, Switch, Redirect, BrowserRouter } from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Login from './components/login/login.js';
 import Details from './components/details/details.js';
+import Dashboard from './components/Dashboard/Dashboard';
 
 function App() {
   return (
-    <BrowserRouter>      
-      <Switch>      
+    <BrowserRouter>
+    <div>
+      <Switch>
         <Route exact path="/" component={Login} />   
         <Route exact path="/details" component={Details} />      
-        {/* <Redirect to="/login"  /> */}
-      </Switch>        
-    </BrowserRouter>    
+        <Route exact path="/dashboard" component={Dashboard} />   
+      </Switch>
+    </div>
+  </BrowserRouter>
   );
 }
 
