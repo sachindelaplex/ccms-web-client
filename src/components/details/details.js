@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './details.css';
 import axios from 'axios';
@@ -6,9 +6,41 @@ import Select from 'react-select';
 
 function Details(props){   
 
+    useEffect(() => {
+        axios.get('/court/getRegistation')
+        .then(function(response) {
+          console.log('response ',response.data);
+            
+        }).catch(function (error) {
+            console.log('error ',error);
+        });    
+    },[]);
+
+
     console.log('details page');
-    const [inputs, setInputs] = useState({CCTNS:'',bailStatus:''});
-    // const [selectedOption, setSelectedOption] = useState(null);
+    const [inputs, setInputs] = useState({
+        CCTNS : '',
+        FIR : '',
+        RCC : '',
+        regDate : '',
+        regTime : '',
+        complaint : '',
+        accused : '',
+        hearingDate : '',
+        pairaniName : '',
+        ppName : '',
+        ioName : ''
+    });
+    
+    const [policeStation, setPoliceStation] = useState(null);
+    const [court, setCourt] = useState(null);
+    const [judge, setJudge] = useState(null);
+    const [bailStatus, setBailStatus] = useState(null);
+    const [forensic, setForensic] = useState(null);
+    const [ps, setPS] = useState(null);
+    const [ca, setCA] = useState(null);
+    const [dna, setDNA] = useState(null);
+    const [handwritingReport, setHandwritingReport] = useState(null);
 
     const options = [
         { value: 'Yes', label: 'Yes' },
@@ -19,6 +51,7 @@ function Details(props){
     const handleInputChange = (e) => {
         // event.persist();
         const {name, value} = e.target
+        console.log('e ', e.target.name)
         //  setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
         setInputs({...inputs, [name]: value})
       }
@@ -53,7 +86,7 @@ function Details(props){
                 <div class="row mr5">
                 <div class="w-50 pdr-10">
                 <label class="col-5">Time of Registration : </label>
-                <input class="col-7" type="date" name="regDate" value={inputs.regTime} onChange={handleInputChange}/>
+                <input class="col-7" type="date" name="regTime" value={inputs.regTime} onChange={handleInputChange}/>
                 </div>
                 <div class="w-50">
                 <label class="col-5">Police Station :  </label>
@@ -94,7 +127,7 @@ function Details(props){
                 <div class="w-50 row mr-0">
                     <label class="col-5">Bail Status</label>
                     <div class="col-7 pd-0">
-                    <Select  name="bailStatus" value={inputs.bailStatus} onChange={handleInputChange} options={options}/>
+                    <Select  name="bailStatus" value={bailStatus} onChange={e => setBailStatus(e)} options={options}/>
                     </div>
                 </div>
                 </div>
@@ -105,14 +138,14 @@ function Details(props){
                 <div class="w-50 row mr-0">
                     <label class="col-5">Forensic</label>
                     <div class="col-7 pd-0">
-                    <Select  name="forensic" value={inputs.forensic} onChange={handleInputChange} options={options}/>
+                    <Select  name="forensic" value={forensic} onChange={e => setForensic(e)} options={options}/>
                     </div>
                 </div>
 
                 <div class="w-50 row mr-0">
                     <label class="col-5">PS</label>
                     <div class="col-7 pd-0">
-                    <Select  name="ps" value={inputs.ps} onChange={handleInputChange} options={options}/>
+                    <Select  name="ps" value={ps} onChange={e => setPS(e)} options={options}/>
                     </div>
                 </div>
                 </div>
@@ -124,14 +157,14 @@ function Details(props){
                 <div class="w-50 row mr-0">
                     <label class="col-5">CA Report</label>
                     <div class="col-7 pd-0">
-                    <Select  name="CA" value={inputs.CA} onChange={handleInputChange} options={options}/>
+                    <Select  name="CA" value={ca} onChange={e => setCA(e)} options={options}/>
                     </div>
                 </div>
 
                 <div class="w-50 row mr-0">
                     <label class="col-5">DNA Report</label>
                     <div class="col-7 pd-0">
-                    <Select  name="DNA" value={inputs.DNA} onChange={handleInputChange} options={options}/>
+                    <Select  name="DNA" value={dna} onChange={e => setDNA(e)} options={options}/>
                     </div>
                 </div>
                 </div>
@@ -140,7 +173,7 @@ function Details(props){
                 <div class="w-50 row mr-0">
                     <label class="col-5">Handwriting Report</label>
                     <div class="col-7 pd-0">
-                    <Select  name="handwritingReport" value={inputs.handwritingReport} onChange={handleInputChange} options={options}/>
+                    <Select  name="handwritingReport" value={handwritingReport} onChange={e => setHandwritingReport} options={options}/>
                     </div>
                 </div>
                 </div>
