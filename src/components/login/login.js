@@ -26,29 +26,29 @@ function Login(props){
      return (
 		<React.Fragment>
 		<div id="login">
-	    <div class="container">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<img src="/images/logo-big.png" alt="" class="logo-big" />
+	    <div className="container">
+			<div className="row">
+				<div className="col-md-12 text-center">
+					<img src="/images/logo-big.png" alt="" className="logo-big" />
 				</div>
 			</div>
-	        <div id="login-row" class="row justify-content-center align-items-center">
-	            <div id="login-column" class="col-md-7">
-	                <div class="login-box col-md-12 loginbox">
-	                    <form id="login-form" class="form" onSubmit={(e) => login(e)}>
-	                        <h1 class="text-center">Court Case Monitoring System</h1>
-	                        <div class="form-group login-field">
-	                            <label for="username" class="">User Name:</label><br/>
-	                            <input type="email" class="form-control" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
+	        <div id="login-row" className="row justify-content-center align-items-center">
+	            <div id="login-column" className="col-md-7">
+	                <div className="login-box col-md-12 loginbox">
+	                    <form id="login-form" className="form" onSubmit={(e) => login(e)}>
+	                        <h1 className="text-center">Court Case Monitoring System</h1>
+	                        <div className="form-group login-field">
+	                            <label>User Name:</label><br/>
+	                            <input type="email" className="form-control" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
 	                        </div>
-	                        <div class="form-group login-field">
-	                            <label for="password" class="">Password:</label><br/>
-	                            <input type="password" name="password" id="password" class="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+	                        <div className="form-group login-field">
+	                            <label>Password:</label><br/>
+	                            <input type="password" name="password" id="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required/>
 	                        </div>
 							<br/>	
-							<div class="row login-field">
-								<div class="col-md-6">
-								<input type="submit" name="submit" class="btn btn-info btn-md" value="Login"/><br/><br/>								
+							<div className="row login-field">
+								<div className="col-md-12 txtAlign">
+								<input type="submit" name="submit" className="btn btn-info btn-md btnwd" value="Login"/><br/><br/>								
 								</div>
 							</div>				             
 	                    </form>

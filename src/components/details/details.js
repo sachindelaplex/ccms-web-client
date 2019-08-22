@@ -6,7 +6,7 @@ import Select from 'react-select';
 import Menu from '../Menu/Menu';
 import { DatePicker } from 'antd';
 import { TimePicker } from 'antd';
-// import { Container, Row, Col, Button  } from 'bootstrap-4-react';
+import { Container, Row, Col, Button  } from 'bootstrap-4-react';
 
 function Details(props){   
     const [policestationList, setPolicestationList] = useState([]);
@@ -15,6 +15,19 @@ function Details(props){
     const [date_of_registration, setDate_of_registration] = useState('');
     const [time_of_registration, setTime_of_registration] = useState('');
     const [hearing_date, setHearing_date] = useState('');
+
+    const [date_of_evidence, setDate_of_evidence] = useState('');
+    const [date_of_statement, setDate_of_statement] = useState('');
+    const [date_of_argument, setDate_of_argument] = useState('');
+    const [date_of_judgement, setDate_of_judgement] = useState('');
+
+    const rowStyle = {
+        height: '500px',
+        backgroundColor: '#fff',
+        marginTop: '1rem',
+        border:'2px solid darkgrey',
+        position:'relative'
+        };
 
     useEffect(() => {       
         axios.get('/court/getRegistation', {
@@ -60,6 +73,20 @@ function Details(props){
         judge : ''
     });
     
+
+    const [actionInputs, setActioninputs] = useState({
+        witness : '',
+        io : '',
+        punch : '',
+        evidenceStatus : '',
+        statementRemark : '',
+        statementStatus : '',
+        argumentRemark : '',
+        argumentStatus : '',
+        judgementRemark : '',
+        judgementStatus : ''
+    });
+
     const [ps, setPS] = useState(null);
  
     const options = [
@@ -73,6 +100,12 @@ function Details(props){
         const {name, value} = e.target       
         setInputs({...inputs, [name]: value})
       }
+
+      const handleActionChange = (e) => {       
+        const {name, value} = e.target       
+        setActioninputs({...inputs, [name]: value})
+      }
+      
 
       const reset = () => {
         setInputs({
@@ -98,7 +131,8 @@ function Details(props){
             panch : '',
             policestation : '',
             court : '' ,
-            judge : ''
+            judge : '',
+            case_action_states : {}
         })
       }
 
@@ -107,7 +141,36 @@ function Details(props){
         inputs.date_of_registration = date_of_registration;
         inputs.time_of_registration = time_of_registration;
         inputs.hearing_date = hearing_date;       
-        console.log('now inputs are .....',inputs)
+        
+
+        var gridData = {
+            evidence : {
+                date : date_of_evidence,
+                witness : actionInputs.witness,
+                io : actionInputs.io,
+                punch : actionInputs.punch,
+                status : actionInputs.evidenceStatus
+            },
+            statement : {
+                date : date_of_statement,
+                remark : actionInputs.statementRemark,
+                status : actionInputs.statementStatus
+            },
+            argument : {
+                date : date_of_argument,
+                remark : actionInputs.argumentRemark,
+                status : actionInputs.argumentStatus
+            },
+            judgement : {
+                date : date_of_judgement,
+                remark : actionInputs.judgementRemark,
+                status : actionInputs.judgementStatus
+            }
+        }
+
+        inputs.case_action_states = gridData;
+        
+        console.log('now inputs are .....',inputs);
         axios.post('/court/save',inputs )
 		.then(function(response) {
             console.log('response ', response);
@@ -116,6 +179,12 @@ function Details(props){
             console.log('error ',error);
         });     
       }
+
+      const changeDatepickerValue = () => {
+
+      }
+
+
 
      return (
         <React.Fragment>
@@ -354,20 +423,207 @@ function Details(props){
 											</div>
                                         </div>
                                         <br/>
+                                    
 
-
-
-                                        
-										<div class="row">
-											<div class="col-md-6">
+                                        {/* <br/>
+                                        <label class="group-label">Case Action Dates</label>
+                                        <div class="row">                                        
+											<div class="col-md-3">
+												<label>Date</label><br/>
+											</div>
+                                            <div class="col-md-3">
+												<label>Type of Action</label><br/>
+											</div>
+                                            <div class="col-md-3">
+												<label>Remark</label><br/>
+											</div>
+                                            <div class="col-md-3">
+												<label>Status</label><br/>
+											</div>
+                                        </div>
+                                        <div class="row">                                        
+											<div class="col-md-4">
 												<div class="form-group login-field">
-                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Submit"/>
+													<label>Pairani Name</label><br/>
+													<input type="text" class="form-control" name="pairani" value={inputs.pairani} onChange={handleInputChange} required/>
+												</div>
+											</div>
+                                        </div>
+                                        <br/> */}
+
+
+
+
+
+
+
+
+
+
+
+                                        <Row>
+<div><h5><b>Case Action Dates</b></h5></div>
+</Row>
+<Row style={rowStyle} alignItems="start">
+<Col>
+<div><h5><b>Date</b></h5></div>
+<br></br>
+<div><DatePicker name="date_of_evidence" onChange={(date, dateString) => {setDate_of_evidence(dateString)}} required/> </div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div><DatePicker name="date_of_statement" onChange={(date, dateString) => {setDate_of_statement(dateString)}} required/></div>
+<br></br>
+<br></br>
+<br></br>
+<div><DatePicker name="date_of_argument" onChange={(date, dateString) => {setDate_of_argument(dateString)}} required/></div>
+<br></br>
+<br></br>
+<br></br>
+<div><DatePicker name="date_of_judgement" onChange={(date, dateString) => {setDate_of_judgement(dateString)}} required/></div>
+</Col>
+<Col>
+<div><h5><b>Type Of Action</b></h5></div>
+<br></br>
+<div><h5>Evidence</h5></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div><h5>Statement</h5></div>
+<br></br>
+<br></br>
+<br></br>
+<div><h5>Argument</h5></div>
+<br></br>
+<br></br>
+<br></br>
+<div><h5>Judegement</h5></div>
+</Col>
+<Col>
+<div><h5><b></b></h5></div>
+<br></br>
+<div>
+<span>Witness</span>
+<select className="form-control input_user" name="witness" value={actionInputs.witness} onChange={handleActionChange} required>
+<option value="">Select Witness</option>
+<option value="Public">Public</option>
+<option value="Police">Police</option>
+</select>
+</div>
+<div>
+<span>IO</span>
+<select className="form-control input_user" name="io" value={actionInputs.io} onChange={handleActionChange} required>
+<option value="">Select IO</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+<option value="NA">NA</option>
+</select>
+</div>
+<div>
+<span>Punch</span>
+<select className="form-control input_user" name="punch" value={actionInputs.punch} onChange={handleActionChange} required>
+<option value="">Select Punch</option>
+<option value="Seizure Panch">Seizure Panch</option>
+<option value="Other Panch">Other Panch</option>
+</select>
+</div>
+<br></br>
+<textarea class="form-control input_user" name="statementRemark" value={actionInputs.statementRemark} onChange={handleActionChange} required/>
+<br></br>
+<textarea class="form-control input_user" name="argumentRemark" value={actionInputs.argumentRemark} onChange={handleActionChange} required/>
+<br></br>
+<textarea class="form-control input_user" name="judgementRemark" value={actionInputs.judgementRemark} onChange={handleActionChange} required/>
+</Col>
+<Col>
+<div><h5><b>Status</b></h5></div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<div>
+<select className="form-control input_user" name="evidenceStatus" value={actionInputs.evidenceStatus} onChange={handleActionChange} required>
+<option value="Pending">Pending</option>
+<option value="Completed">Completed</option>
+<option value="In-Progress">In-Progress</option>
+<option value="NA">NA</option>
+</select>
+</div>
+<br></br>
+<br></br>
+<br></br>
+<div>
+<select className="form-control input_user" name="statementStatus" value={actionInputs.statementStatus} onChange={handleActionChange} required>
+<option value="Pending">Pending</option>
+<option value="Completed">Completed</option>
+<option value="In-Progress">In-Progress</option>
+<option value="NA">NA</option>
+</select>
+</div>
+<br></br>
+<br></br>
+<div>
+<select className="form-control input_user" name="argumentStatus" value={actionInputs.argumentStatus} onChange={handleActionChange} required>
+<option value="Pending">Pending</option>
+<option value="Completed">Completed</option>
+<option value="In-Progress">In-Progress</option>
+<option value="NA">NA</option>
+</select>
+</div>
+<br></br>
+<br></br>
+<div>
+<select className="form-control input_user" name="judgementStatus" value={actionInputs.judgementStatus} onChange={handleActionChange} required>
+<option value="Pending">Pending</option>
+<option value="Completed">Completed</option>
+<option value="In-Progress">In-Progress</option>
+<option value="NA">NA</option>
+</select>
+</div>
+
+</Col>
+</Row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+										<div class="row">
+											<div class="col-md-6 txtRight">
+												<div class="form-group login-field">
+                                                <input type="submit" name="submit" class="btn btn-info btn-md btnwd" value="Submit"/>
                                                 {/* <button type="button" class="btn btn-info btn-md" onClick={() => { submit() }}>Submit</button> */}
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group login-field">
-                                                <button type="button" class="btn btn-info btn-md" onClick={() => { reset() }}>Reset</button>
+                                                <button type="button" class="btn btn-info btn-md btnwd" onClick={() => { reset() }}>Reset</button>
 												</div>
 											</div>
 										</div>

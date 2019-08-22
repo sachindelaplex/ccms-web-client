@@ -202,9 +202,13 @@ footer{
   padding: 10px 20px 20px 15px;
 }
 
+.btnwd{
+  width: 150px;
+}
 
-
-
+.txtAlign{
+  text-align: center;
+}
 
 
 
