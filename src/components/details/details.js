@@ -53,8 +53,8 @@ function Details(props){
         pp : '',
         io : '',
         bail_custody_status : '',
-        witness : '',
-        panch : '',
+        witness : 'Police',
+        panch : 'Other Panch',
         policestation : '',
         court : '' ,
         judge : ''
@@ -94,8 +94,8 @@ function Details(props){
             pp : '',
             io : '',
             bail_custody_status : '',
-            witness : 'Police',
-            panch : 'Other Panch',
+            witness : '',
+            panch : '',
             policestation : '',
             court : '' ,
             judge : ''
@@ -110,7 +110,8 @@ function Details(props){
         console.log('now inputs are .....',inputs)
         axios.post('/court/save',inputs )
 		.then(function(response) {
-			console.log('response ', response)
+            console.log('response ', response);
+            props.history.push('/dashboard');
         }).catch(function (error) {
             console.log('error ',error);
         });     
