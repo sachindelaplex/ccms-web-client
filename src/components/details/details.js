@@ -4,52 +4,64 @@ import './details.css';
 import axios from 'axios';
 import Select from 'react-select';
 import Menu from '../Menu/Menu';
+import { DatePicker } from 'antd';
+import { TimePicker } from 'antd';
 // import { Container, Row, Col, Button  } from 'bootstrap-4-react';
 
 function Details(props){   
-var policestationList = [];
-var courtList = [];
-var judgeList = [];
+    const [policestationList, setPolicestationList] = useState([]);
+    const [courtList, setCourtList] = useState([]);
+    const [judgeList, setJudgeList] = useState([]);
+    const [date_of_registration, setDate_of_registration] = useState('');
+    const [time_of_registration, setTime_of_registration] = useState('');
+    const [hearing_date, setHearing_date] = useState('');
 
-    useEffect(() => {
-        axios.get('/court/getRegistation')
+    useEffect(() => {       
+        axios.get('/court/getRegistation', {
+            "headers": {
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+          })
         .then(function(response) {
           console.log('response ',response.data);
-          policestationList = response.data.policestation
-          console.log('element ',policestationList);
-          courtList = response.data.court;
-          judgeList = response.data.judge; 
+          setPolicestationList(response.data.policestation)         
+          setCourtList(response.data.court);
+          setJudgeList(response.data.judge); 
         }).catch(function (error) {
             console.log('error ',error);
         });    
     },[]);
 
 
-    console.log('details page');
+    // console.log('details page');
     const [inputs, setInputs] = useState({
         cctns_no : '',
         fir_no : '',
         cc_rcc_no : '',
-        regDate : '',
-        regTime : '',
+        date_of_registration : '',
+        time_of_registration : '',
         complaints : '',
         accused : '',
         hearing_date : '',
+        bail : '',
+        custody : '',
+        forensic : '',
+        ca_report : '',
+        dna_report : '',
+        handwriting_report : '',
         pairani : '',
         pp : '',
-        io : ''
+        io : '',
+        bail_custody_status : '',
+        witness : '',
+        panch : '',
+        policestation : '',
+        court : '' ,
+        judge : ''
     });
     
-    const [policeStation, setPoliceStation] = useState(null);
-    const [court, setCourt] = useState(null);
-    const [judge, setJudge] = useState(null);
-    const [bailStatus, setBailStatus] = useState(null);
-    const [forensic, setForensic] = useState(null);
     const [ps, setPS] = useState(null);
-    const [ca_report, setCA] = useState(null);
-    const [dna_report, setDNA] = useState(null);
-    const [handwriting_report, setHandwritingReport] = useState(null);
-
+ 
     const options = [
         { value: 'Yes', label: 'Yes' },
         { value: 'No', label: 'No' },
@@ -58,198 +70,312 @@ var judgeList = [];
 
     const handleInputChange = (e) => {
         // event.persist();
-        const {name, value} = e.target
-        console.log('e ', e.target.name)
-        //  setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
+        const {name, value} = e.target       
         setInputs({...inputs, [name]: value})
       }
 
-      const submit = () => {
-        // setInputs({...inputs, ["policestation"]: policeStation.name});
-        // setInputs({...inputs, ["court"]: court.name});
-        // setInputs({...inputs, ["judge"]: judge.name});
+      const reset = () => {
+        setInputs({
+            cctns_no : '',
+            fir_no : '',
+            cc_rcc_no : '',
+            date_of_registration : '',
+            time_of_registration : '',
+            complaints : '',
+            accused : '',
+            hearing_date : '',
+            bail : '',
+            custody : '',
+            forensic : '',
+            ca_report : '',
+            dna_report : '',
+            handwriting_report : '',
+            pairani : '',
+            pp : '',
+            io : '',
+            bail_custody_status : '',
+            witness : 'Police',
+            panch : 'Other Panch',
+            policestation : '',
+            court : '' ,
+            judge : ''
+        })
+      }
 
-        // setInputs({...inputs, ["bail"]: bailStatus.value});
-        // setInputs({...inputs, ["forensic"]: forensic.value});
-        // setInputs({...inputs, ["ca_report"]: ca_report.value});
-        // setInputs({...inputs, ["dna_report"]: dna_report.value});
-        // setInputs({...inputs, ["handwriting_report"]: handwriting_report.value});
-        // setInputs({...inputs, ["judge"]: judge.name});
-        
-
+      const submit = (e) => { 
+        e.preventDefault();
+        inputs.date_of_registration = date_of_registration;
+        inputs.time_of_registration = time_of_registration;
+        inputs.hearing_date = hearing_date;       
+        console.log('now inputs are .....',inputs)
+        axios.post('/court/save',inputs )
+		.then(function(response) {
+			console.log('response ', response)
+        }).catch(function (error) {
+            console.log('error ',error);
+        });     
       }
 
      return (
         <React.Fragment>
-            <Menu/>
-            <form class="form">
-                <div>
-                <label class="d-flex">Case Basic Info :</label>
-                <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">CCTNS No : </label>
-                <input class="col-7"type="text" name="cctns_no" value={inputs.cctns_no} onChange={handleInputChange}/>
-                </div>
-                <div class="w-50">
-                <label class="col-5">FIR No : </label>
-                <input class="col-7" type="text" name="fir_no" value={inputs.fir_no} onChange={handleInputChange}/>            
-                </div>
-                </div>
+            <div class="col-md-11 col-sm-10">
+					<div class=" login-field page-title">
+						<h1>Details</h1>
+			        </div>          
+					<div id="login-row" class="col-md-12">
+							<div id="login-column">
+								<div class="login-box">
+									<form id="login-form" class="form" onSubmit={(e) => submit(e)}>
+                                        <label class="group-label">Case Basic Info</label>
+                                        <div class="row">                                        
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>CCTNS No</label><br/>
+													<input type="text" class="form-control" name="cctns_no" value={inputs.cctns_no} onChange={handleInputChange} required/>
+													{/* <div class="validation-msg">Please enter Valid Name</div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>FIR No</label><br/>
+													<input type="text" class="form-control" name="fir_no" value={inputs.fir_no} onChange={handleInputChange} required/>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>CC/RCC No</label><br/>
+													<input type="text" class="form-control" name="cc_rcc_no" value={inputs.cc_rcc_no} onChange={handleInputChange} required/>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Date of Registration</label><br/>                    
+													<DatePicker name="date_of_registration" onChange={(date, dateString) => {setDate_of_registration(dateString)}} required/> 
+                                                    {/* <input type="text" name="" id="" class="form-control"/> */}
+													<div class="validation-msg"></div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Time of Registration</label><br/>
+													<TimePicker name="time_of_registration" onChange={(date, timeString) => {setTime_of_registration(timeString)}} required/>
+                                                    {/* <input type="text" name="" id="" class="form-control"/>
+													<div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Police Station</label><br/>
+                                                    <select class="custom-select" name="policestation" value={inputs.policestation} onChange={handleInputChange} required>
+                                                    <option  value="">Select Police Station</option>
+                                                    {policestationList.map( (item, i) => (
+                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    ) )}
+                                                    </select>
+													{/* <input type="text" name="" id="" class="form-control"/>
+													<div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Court</label><br/>
+                                                    <select class="custom-select" name="court" value={inputs.court} onChange={handleInputChange} required>
+                                                    <option  value="">Select Court</option>
+                                                    {courtList.map( (item, i) => (
+                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    ) )}
+                                                    </select>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Judge</label><br/>
+                                                    <select class="custom-select" name="judge" value={inputs.judge} onChange={handleInputChange} required>
+                                                    <option  value="">Select Judge</option>
+                                                    {judgeList.map( (item, i) => (
+                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    ) )}
+                                                    </select>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Hearing Date</label><br/>
+                                                    <DatePicker name="hearing_date" onChange={(date, dateString) => {setHearing_date(dateString)}} required/>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+										</div>
+										<br/>
+                                        <label class="group-label">Complaint</label>
+                                        <div class="row">                                       
+											<div class="col-md-12">
+												<div class="form-group login-field">
+													{/* <label>Complaint</label><br/> */}
+                                                    <textarea class="form-control" name="complaints" value={inputs.complaints} onChange={handleInputChange} required/>													
+													{/* <div class="validation-msg">Please enter Valid Name</div> */}
+												</div>
+											</div>											
+										</div>
+                                        <br/>
+                                        <label class="group-label">Accused</label>
+                                        <div class="row">                                       
+											<div class="col-md-12">
+												<div class="form-group login-field">
+													{/* <label>Accused</label><br/> */}
+                                                    <textarea class="form-control" name="accused" value={inputs.accused} onChange={handleInputChange} required/>			{/* <div class="validation-msg">Please enter Valid Name</div> */}
+												</div>
+											</div>											
+										</div>
+                                        <br/>
+                                        <label class="group-label">Bail/Custody</label>
+                                        <div class="row">                                       
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Bail</label><br/>
+                                                    <select class="custom-select" name="bail" value={inputs.bail} onChange={handleInputChange} required>
+                                                    <option  value="">Select Bail Status</option>
+                                                    <option  value="Bailable Warrant">Bailable Warrant</option>
+                                                    <option  value="Non Bailable Warrant">Non Bailable Warrant</option>
+                                                    </select>
+												</div>
+											</div>	
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Custody</label><br/>
+                                                    <select class="custom-select" name="custody" value={inputs.custody} onChange={handleInputChange} required>
+                                                    <option  value="">Select Custody Status</option>
+                                                    {options.map( (item, i) => (
+                                                    <option key={i} value={item.value}>{item.label}</option>
+                                                    ) )}
+                                                    </select>
+												</div>
+											</div>		
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Bail/Custody Status</label><br/>
+                                                    <select class="custom-select" name="bail_custody_status" value={inputs.bail_custody_status} onChange={handleInputChange} required>
+                                                    <option  value="">Select Bail/Custody Status</option>
+                                                    <option  value="On Bail">On Bail</option>
+                                                    <option  value="Bond Condition">Bond Condition</option>
+                                                    </select>
+												</div>
+											</div>												
+										</div>
 
-                <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">CC/RCC No : </label>
-                <input class="col-7" type="text" name="cc_rcc_no" value={inputs.cc_rcc_no} onChange={handleInputChange}/>
-                </div>
-                <div class="w-50">
-                <label class="col-5">Date of Registration : </label>
-                <input class="col-7" type="date" name="regDate" value={inputs.regDate} onChange={handleInputChange}/>            
-                </div>
-                </div>
-
-                <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">Time of Registration : </label>
-                <input class="col-7" type="date" name="regTime" value={inputs.regTime} onChange={handleInputChange}/>
-                </div>
-                <div class="w-50 row mr-0">
-                <label class="col-5">Police Station :  </label>
-                <div class="col-7 pd-0">
-                    <Select  name="policeStation" value={policeStation} onChange={e => setPoliceStation(e)} options={policestationList.name}/>
-                </div>
-
-                {/* <input class="col-7" type="text" name="policeStation" value={inputs.policeStation} onChange={handleInputChange}/>             */}
-                </div>
-                </div>
-
-                {/* <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">Court :  </label>
-                <input class="col-7" type="text" name="court" value={inputs.court} onChange={handleInputChange}/>
-                </div>
-                <div class="w-50">
-                <label class="col-5">Judge :  </label>
-                <input class="col-7" type="text" name="judge" value={inputs.judge} onChange={handleInputChange}/>            
-                </div>
-                </div> */}
 
 
-                <div class="row mr5">
-                <div class="w-50 row mr-0">
-                    <label class="col-5">Court :</label>
-                    <div class="col-7 pd-0 mrl-5">
-                    <Select  name="court" value={court} onChange={e => setCourt(e)} options={options}/>
-                    </div>
-                </div>
 
-                <div class="w-50 row mr-0">
-                    <label class="col-5">Judge :</label>
-                    <div class="col-7 pd-0">
-                    <Select  name="judge" value={judge} onChange={e => setJudge(e)} options={options}/>
-                    </div>
-                </div>
-                </div>
-                </div>
+                                        <br/>
+                                        <label class="group-label">Muddemaal</label>
+                                        <div class="row">                                       
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Forensic</label><br/>
+                                                    <select class="custom-select" name="forensic" value={inputs.forensic} onChange={handleInputChange} required>
+                                                    <option  value="">Select Forensic Report Status</option>
+                                                    {options.map( (item, i) => (
+                                                    <option key={i} value={item.value}>{item.label}</option>
+                                                    ) )}
+                                                    </select>
+												</div>
+											</div>	
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>PS</label><br/>
+                                                    <Select  name="ps" value={ps} onChange={e => setPS(e)} options={options}/>
+												</div>
+											</div>												
+										</div>
+                                        <br/>
+                                        <label class="group-label">Forensic Reports</label>
+                                        <div class="row">                                       
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>CA Report</label><br/>
+                                                    <select class="custom-select" name="ca_report" value={inputs.ca_report} onChange={handleInputChange} required>
+                                                    <option value="">Select CA Report Status</option>
+                                                    {options.map( (item, i) => (
+                                                    <option key={i} value={item.value}>{item.label}</option>
+                                                    ) )}
+                                                    </select> 
+												</div>
+											</div>	
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>DNA Report</label><br/>
+                                                    <select class="custom-select" name="dna_report" value={inputs.dna_report} onChange={handleInputChange} required>
+                                                    <option  value="">Select DNA Report Status</option>
+                                                    {options.map( (item, i) => (
+                                                    <option key={i} value={item.value}>{item.label}</option>
+                                                    ) )}
+                                                    </select> 
+												</div>
+											</div>		
+                                            <div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Handwriting Report</label><br/>
+                                                    <select class="custom-select" name="handwriting_report" value={inputs.handwriting_report} onChange={handleInputChange} required>
+                                                    <option  value="">Select Handwriting Report Status</option>
+                                                    {options.map( (item, i) => (
+                                                    <option key={i} value={item.value}>{item.label}</option>
+                                                    ) )}
+                                                    </select>
+												</div>
+											</div>												
+										</div>
+                                        <br/>
+                                        <label class="group-label">Manpower</label>
+                                        <div class="row">                                        
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>Pairani Name</label><br/>
+													<input type="text" class="form-control" name="pairani" value={inputs.pairani} onChange={handleInputChange} required/>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>PP Name</label><br/>
+													<input type="text" class="form-control" name="pp" value={inputs.pp} onChange={handleInputChange} required/>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group login-field">
+													<label>IO Name</label><br/>
+													<input type="text" class="form-control" name="io" value={inputs.io} onChange={handleInputChange} required/>
+													{/* <div class="validation-msg"></div> */}
+												</div>
+											</div>
+                                        </div>
+                                        <br/>
 
-                <div class="row mr5">
-                <div class="w-50">
-                    <label class="col-5 pdl-0">Complaint</label>
-                    <textarea class="col-7 mrl-5" name="complaints" value={inputs.complaints} onChange={handleInputChange} />
-                </div>
 
-                <div class="w-50">
-                    <label class="col-5">Accused</label>
-                    <textarea class="col-7" name="accused" value={inputs.accused} onChange={handleInputChange} />
-                </div>
-                </div>
 
-                <div class="row mr5">
-                <div class="w-50">
-                    <label class="col-5 pdl-0">Hearing Date</label>
-                    <input type="date" class="col-7 mrl-5" name="hearing_date" value={inputs.hearing_date} onChange={handleInputChange}/>
-                </div>
-
-                <div class="w-50 row mr-0">
-                    <label class="col-5">Bail Status</label>
-                    <div class="col-7 pd-0">
-                    <Select  name="bailStatus" value={bailStatus} onChange={e => setBailStatus(e)} options={options}/>
-                    </div>
-                </div>
-                </div>
-
-                <div>
-                <label class="d-flex">Muddemaal :</label>
-                <div class="row mr5">
-                <div class="w-50 row mr-0">
-                    <label class="col-5">Forensic</label>
-                    <div class="col-7 pd-0 mrl-5">
-                    <Select  name="forensic" value={forensic} onChange={e => setForensic(e)} options={options}/>
-                    </div>
-                </div>
-
-                <div class="w-50 row mr-0">
-                    <label class="col-5">PS</label>
-                    <div class="col-7 pd-0">
-                    <Select  name="ps" value={ps} onChange={e => setPS(e)} options={options}/>
-                    </div>
-                </div>
-                </div>
-                </div>
-
-                <div>
-                <label class="d-flex">Forensic Reports :</label>
-                <div class="row mr5">
-                <div class="w-50 row mr-0">
-                    <label class="col-5">CA Report</label>
-                    <div class="col-7 pd-0 mrl-5">
-                    <Select  name="ca_report" value={ca_report} onChange={e => setCA(e)} options={options}/>
-                    </div>
-                </div>
-
-                <div class="w-50 row mr-0">
-                    <label class="col-5">DNA Report</label>
-                    <div class="col-7 pd-0">
-                    <Select  name="dna_report" value={dna_report} onChange={e => setDNA(e)} options={options}/>
-                    </div>
-                </div>
-                </div>
-
-                <div class="row mr5">
-                <div class="w-50 row mr-0">
-                    <label class="col-5">Handwriting Report</label>
-                    <div class="col-7 pd-0 mrl-5">
-                    <Select  name="handwriting_report" value={handwriting_report} onChange={e => setHandwritingReport(e)} options={options}/>
-                    </div>
-                </div>
-                </div>
-                </div>
-
-                <div>
-                <label class="d-flex">Manpower :</label>
-                <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">Pairani Name : </label>
-                <input class="col-7"type="text" name="pairani" value={inputs.pairani} onChange={handleInputChange}/>
-                </div>
-                <div class="w-50">
-                <label class="col-5">PP Name : </label>
-                <input class="col-7" type="text" name="pp" value={inputs.pp} onChange={handleInputChange}/>            
-                </div>
-                </div>
-
-                <div class="row mr5">
-                <div class="w-50 pdr-10">
-                <label class="col-5">IO Name : </label>
-                <input class="col-7"type="text" name="io" value={inputs.io} onChange={handleInputChange}/>
-                </div>
-                </div>
-
-                </div>
-
-                <div class="d-flex justify-content-center mt-3 login_container">
-					<button type="button" class="btn login_btn" onClick={() => { submit() }}>Submit</button>
-				</div>
-            </form>
+                                        
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group login-field">
+                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Submit"/>
+                                                {/* <button type="button" class="btn btn-info btn-md" onClick={() => { submit() }}>Submit</button> */}
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group login-field">
+                                                <button type="button" class="btn btn-info btn-md" onClick={() => { reset() }}>Reset</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				
         </React.Fragment>
      );
    }

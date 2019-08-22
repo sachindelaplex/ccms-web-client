@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import './login.css';
-import logo from '../../logo.svg';
+import './normalize.css';
 import axios from 'axios';
 
 function Login(props){   
 
-	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	// const [showerror, setError] = useState(false);
 	// const [showMsg, setMsg] = useState(false);
 
-	const login = () => {
-		axios.post('/user/login', {name:email, password:password})
+	const login = (e) => {
+		e.preventDefault();
+		axios.post('/user/login', {name:username, password:password})
 		.then(function(response) {
 			localStorage.setItem('token',response.data.token);
 			localStorage.setItem('id',response.data.id);
@@ -23,46 +24,43 @@ function Login(props){
     }
 
      return (
-			<div className="user_card">
-				<div className="d-flex justify-content-center">
-					<div className="brand_logo_container d-flex justify-content-center">
-						<img src={logo} className="brand_logo" alt="Logo" />
-					</div>
+		<React.Fragment>
+		<div id="login">
+	    <div class="container">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<img src="/images/logo-big.png" alt="" class="logo-big" />
 				</div>
-				<div className="d-flex justify-content-center form_container">
-					<form>
-						<div className="input-group mb-3">
-							<div className="input-group-append">
-								<span className="input-group-text"><i className="fas fa-user"></i></span>
-							</div>
-							<input type="email" className="form-control input_user" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="username"/>
-						</div>
-						<div className="input-group mb-2">
-							<div className="input-group-append">
-								<span className="input-group-text"><i className="fas fa-key"></i></span>
-							</div>
-							<input type="password" className="form-control input_pass" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password"/>
-						</div>
-						<div className="form-group">
-							<div className="custom-control custom-checkbox">
-								<input type="checkbox" className="custom-control-input" id="customControlInline"/>
-								<label className="custom-control-label">Remember me</label>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div className="d-flex justify-content-center mt-3 login_container">
-					<button type="button" className="btn login_btn" onClick={() => { login() }}>Login</button>
-				</div>
-				
-				{/* { showerror ? <span className="error_class">Invalid Email</span> : null }
-					{ showMsg ? <span className="error_class">Invalid Password</span> : null } */}
-				<div className="mt-4">
-					<div className="d-flex justify-content-center links">
-						<a href="#">Forgot your password?</a>
-					</div>
-				</div>
-			</div>        
+			</div>
+	        <div id="login-row" class="row justify-content-center align-items-center">
+	            <div id="login-column" class="col-md-7">
+	                <div class="login-box col-md-12 loginbox">
+	                    <form id="login-form" class="form" onSubmit={(e) => login(e)}>
+	                        <h1 class="text-center">Court Case Monitoring System</h1>
+	                        <div class="form-group login-field">
+	                            <label for="username" class="">User Name:</label><br/>
+	                            <input type="email" class="form-control" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
+	                        </div>
+	                        <div class="form-group login-field">
+	                            <label for="password" class="">Password:</label><br/>
+	                            <input type="password" name="password" id="password" class="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+	                        </div>
+							<br/>	
+							<div class="row login-field">
+								<div class="col-md-6">
+								<input type="submit" name="submit" class="btn btn-info btn-md" value="Login"/><br/><br/>								
+								</div>
+							</div>				             
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<footer>
+		<p>Copyright © 2019. All rights reserved. Designed & Developed by <a href="https://delaplex.com/"  target="_blank">delaPlex</a>.</p>
+	</footer>
+	</React.Fragment>
      );
    }
     

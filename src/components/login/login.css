@@ -1,9 +1,229 @@
 body {
+	color: #454545;
+	background: #f1f1f1 url(/images/watermark.png) no-repeat;
+}
+h1 {
+	font-size: 30px;
+	color: #0c0288;
+	font-weight: bold;
+}
+header{
+	background: #0c0288;
+	padding:10px;
+}
+.logo-big {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+#login .container-fluid #login-row #login-column .login-box {
+	padding: 10px 20px 20px 15px;
+	background: #fff;
+}
+#login .container-fluid #login-row #login-column .login-box #login-form {
+	padding: 20px;
+}
+#login .container-fluid #login-row #login-column .login-box #login-form #register-link {
+	margin-top: -85px;
+}
+.login-field {
+	padding: 0px 15px 0px 15px;
+}
+.page-title {
+	margin: 15px 0px 15px 0px;
+}
+.form-control
+{
+	height: 36px;
+    padding: 0.25rem 0.75rem;
+	font-size: 1.1rem;
+	line-height: 36px;
+
+}
+.form-group
+{
+	margin-bottom: 0.5rem;
+}
+.custom-select
+{
+	height: 36px;
+	font-size: 15px;
+}
+.btn
+{
+	font-size: 18px;
+}
+footer{
+	background: #FFF;
+	padding: 1px;
+	text-align: center;
+  width: 100%;
+  /*position: fixed;
+  margin-top:25px;
+  bottom:0;*/
+  border-top: 1px solid #ddd;
+}
+.navbar-nav {
+  flex-direction: column !important;
+}
+.nav-link{
+  font-size: 13px;
+  text-align: center;
+  line-height: 15px;
+}
+@media (max-width: 575px) {
+  .align-left {
+    float: left;    
+  }
+}
+.validation-msg{
+  color: red;
+  height: 20px;
+}
+.link {
+  color: #fff;
+}
+.nav-item {
+  border-bottom: 1px solid #0e00b8;
+  width: 100px;
+}
+.nav-item img{
+  width: 34px;
+}
+.nav-item:hover {
+  background: #0e00b8;
+}
+.bg-blue {
+  background: #0c0288;
+  width: 100px;
+  height: 100%;
+  display: block;
+  border-top: 1px solid #0e00b8;
+  padding: 0px !important;
+  min-height: 650px;
+}
+/********Dashboard CSS******/
+.dashboard-bg{
+  padding: 0px 10px 30px 10px; 
+}
+.dashboard {
+  background: #fff;
+  text-align: center;
+  border-radius: 5px;
+  margin: 0px 5px 10px 5px; 
+  transition: 0.3s;
+  padding: 10px 0px 20px 0px;
+  border-radius: 0px; 
+}
+.dashboard p{
+  font-size: 25px;
+  margin: 0;
+  padding: 0;
+}
+.dashboard h1{
+  font-size: 85px;
+  color: #000;
+}
+.dashboard img{
+  width: 90px;
+  margin: 10px;
+}
+.dashboard-link {
+  padding: 15px 15px 0px 15px;
+  border-top: 1px solid #ececef; 
+  margin-top: 10px;
+}
+.dashboard-link a{
+  font-size: 15px;
+  padding: 15px 55px;
+}
+.dashboard-charts {
+  background: #fff;
+  border-radius: 5px;
+  margin: 0px 5px 10px 5px; 
+  transition: 0.3s;
+  padding: 10px 0px 20px 0px;
+  border-radius: 0px;
+  text-align: center;
+}
+.dashboard-charts h5{
+  border-bottom: 1px solid #ececef;
+  padding-bottom: 10px;
+  text-align:left;
+  padding: 5px 20px 15px 20px;
+}
+.dashboard-charts img{
+  text-align: center;
+}
+
+/********Dashboard CSS******/
+
+/********Table Grid CSS******/
+.project-tab thead{
+  background: #f3f3f3;
+  color: #333;
+}
+.table-grid {
+  background: #fff;
+  border-radius: 5px;
+  margin: 0px 5px 10px 5px; 
+  transition: 0.3s;
+  padding: 10px 0px 20px 0px;
+  border-radius: 0px;
+  max-height: 550px;
+  overflow-y: scroll;
+}
+.table-grid h5{
+  border-bottom: 1px solid #ececef;
+  padding-bottom: 10px;
+  text-align:left;
+  padding: 5px 20px 15px 20px;
+}
+
+/********Table Grid CSS******/
+
+/********Pagination CSS******/
+.pagination>li>a { 
+  border-radius: 50% !important;
+  margin: 0 5px;
+}
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: #0c0288;
+  border-color: #0c0288;
+}
+.page-link {
+  color: #0c0288;
+}
+
+
+.loginbox{
+  background: #fff; 
+  padding: 10px 20px 20px 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* body {
     margin: 0;
     padding: 0;
     height: 100%;
     background: white;
-    /* #210085bf !important; */
 }
 
 .user_card {
@@ -16,7 +236,6 @@ body {
     top : 50%;
     left : 50%;
     transform: translate(-50%, -50%);
-    /* relative; */
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -30,7 +249,6 @@ body {
     position: absolute;
     height: 80px;
     width: 80px;
-    /* top: -75px; */
     border-radius: 50%;
     background: black;
     padding: 10px;
@@ -40,7 +258,6 @@ body {
     height:60px;
     width: 60px;
     border-radius: 50%;
-    /* border: 0px solid white; */
   }
   .form_container {
     margin-top: 100px;
@@ -70,4 +287,4 @@ body {
   }
   .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
     background-color: #c0392b !important;
-  }
+  } */
