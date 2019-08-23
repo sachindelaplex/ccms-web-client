@@ -7,7 +7,6 @@ import 'tachyons';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
-//import { DatePicker } from 'antd';
 import * as moment from 'moment';
 
 
@@ -48,6 +47,7 @@ class Dashboard extends Component{
           let monthNum = moment().month(currMonthName).format("M");
           this.state.monthArray = months;
           this.state.currentMonth = monthNum;
+          this.state.month = monthNum;
   
           //Get years list
           let years = [];
@@ -57,6 +57,7 @@ class Dashboard extends Component{
           }
           this.state.yearArray = years;
           this.state.currentYear = currYearName;
+          this.state.year = currYearName;
     }
 
     getPoliceStationList = () =>{
@@ -74,34 +75,12 @@ class Dashboard extends Component{
             }
         });
     }
-    
-    // getAllList = () =>{
-    //     axios.get('/court/getAll', {
-    //         "headers": {
-    //             "Authorization": "Bearer " + localStorage.getItem('token')
-    //         }
-    //       })
-    //     .then((response) =>{
-    //         //this.setState({courtArray: response.data});
-    //     })
-    //     .catch((err) =>{
-    //         if(err){
-    //             this.props.history.push('/');
-    //         }
-    //     });
-    // }
- 
+   
     logout = ()=>{
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         this.props.history.push('/');
     }
-
-    // changeDatepickerValue = (date, dateString) =>  {
-    //     this.setState({
-    //         date : dateString
-    //     })
-    // }
 
     handleForm = (event) =>{
         this.setState({
@@ -116,13 +95,13 @@ class Dashboard extends Component{
         if(this.state.month == '' || this.state.month == undefined){
             monthVal = this.state.currentMonth
         } else {
-            monthVal = this.state.month
+            monthVal = this.state.currentMonth
         }
 
         if(this.state.year == '' || this.state.year == undefined){
             yearVal = this.state.currentYear
         } else {
-            yearVal = this.state.year
+            yearVal = this.state.currentYear
         }
         
 
@@ -158,11 +137,11 @@ class Dashboard extends Component{
     }
 
     changeMonth = (value) =>{
-        this.setState({month : value})
+        this.setState({currentMonth : value})
     }
 
     changeYear = (value) =>{
-        this.setState({year : value})
+        this.setState({currentYear : value})
     }
 
     changePS = (value) =>{
@@ -173,16 +152,11 @@ class Dashboard extends Component{
         
         this.setState({
             courtArray : [],
-            currentYear: this.state.currentYear,
-            currentMonth: this.state.currentMonth,
-            year: this.state.currentYear,
-            month: this.state.currentMonth,
+            currentYear: this.state.year,
+            currentMonth: this.state.month,
             cctns_no: "",
             police_id: "",
         });
-        console.log(this.state)
-
-        //console.log(this.state)
     }
 
     render(){
@@ -240,13 +214,13 @@ class Dashboard extends Component{
                         <Row alignItems="start">
                             
                             <Col>
-                                <select  defaultValue={this.state.currentMonth}  onChange={(e) => this.changeMonth(e.target.value) }   className="form-control input_user">
+                                <select  value={this.state.currentMonth}  onChange={(e) => this.changeMonth(e.target.value) }   className="form-control input_user">
                                 <option value="">Select Month</option>
                                         {mListArray}
                                 </select>
                             </Col>
                             <Col>
-                                <select  defaultValue={this.state.currentYear}  onChange={(e) => this.changeYear(e.target.value) }   className="form-control input_user">
+                                <select  value={this.state.currentYear}  onChange={(e) => this.changeYear(e.target.value) }   className="form-control input_user">
                                 <option value="">Select Month</option>
                                    {yListArray}
                                 </select>
