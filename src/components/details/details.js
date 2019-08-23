@@ -8,7 +8,7 @@ import { DatePicker } from 'antd';
 import { TimePicker } from 'antd';
 import { Container, Row, Col, Button  } from 'bootstrap-4-react';
 
-function Details(props){   
+function Details(props,{match}){   
     const [policestationList, setPolicestationList] = useState([]);
     const [courtList, setCourtList] = useState([]);
     const [judgeList, setJudgeList] = useState([]);
@@ -30,6 +30,8 @@ function Details(props){
         };
 
     useEffect(() => {       
+
+        console.log('param id ',props.match.params._id)
         axios.get('/court/getRegistation', {
             "headers": {
                 "Authorization": "Bearer " + localStorage.getItem('token')
@@ -42,7 +44,27 @@ function Details(props){
           setJudgeList(response.data.judge); 
         }).catch(function (error) {
             console.log('error ',error);
-        });    
+        });   
+        
+        if(props.match.params._id != undefined)
+        {
+            axios.get('/court/getCourt/',  {
+                "headers": {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                "params" : {
+                    id : props.match.params._id
+                }
+              })
+            .then(function(response) {
+              console.log('response ',response.data);
+             
+            }).catch(function (error) {
+                console.log('error ',error);
+            });   
+        }
+
+
     },[]);
 
 
@@ -70,7 +92,8 @@ function Details(props){
         panch : 'Other Panch',
         policestation : '',
         court : '' ,
-        judge : ''
+        judge : '',
+        case_action_states : {}
     });
     
 
@@ -171,20 +194,14 @@ function Details(props){
         inputs.case_action_states = gridData;
         
         console.log('now inputs are .....',inputs);
-        axios.post('/court/save',inputs )
-		.then(function(response) {
-            console.log('response ', response);
-            props.history.push('/dashboard');
-        }).catch(function (error) {
-            console.log('error ',error);
-        });     
+        // axios.post('/court/save',inputs )
+		// .then(function(response) {
+        //     console.log('response ', response);
+        //     props.history.push('/dashboard');
+        // }).catch(function (error) {
+        //     console.log('error ',error);
+        // });     
       }
-
-      const changeDatepickerValue = () => {
-
-      }
-
-
 
      return (
         <React.Fragment>
