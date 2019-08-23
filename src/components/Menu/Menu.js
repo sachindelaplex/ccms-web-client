@@ -3,7 +3,6 @@ import './Menu.css';
 import {Link} from 'react-router-dom';
 import { Navbar, Button, Collapse } from 'bootstrap-4-react';
 
-
 class Menu extends Component{
 
     render(){
@@ -11,9 +10,15 @@ class Menu extends Component{
         const navbars = {
             textDecoration: 'none',
             color: 'darkgray',
-            marginLeft: '20px'
+            marginLeft: '20px',
         }
-          
+
+        const navbars1 = {
+            textDecoration: 'none',
+            color: 'darkgray',
+            marginRight: '1050px',
+        }
+
         return(
             <div>
                 <React.Fragment>
@@ -23,7 +28,10 @@ class Menu extends Component{
                     <Collapse navbar id="navbarColor1">
                         <Navbar.Nav mr="auto">
                             <Link style={navbars}  to="/dashboard">Dashboard</Link>
-                            <Link style={navbars}  to="/details">Add Details</Link>
+                        </Navbar.Nav>
+
+                        <Navbar.Nav mr="auto">
+                            <Link style={navbars1}  to="/details">Add Details</Link>
                         </Navbar.Nav>
                         <Button onClick={this.props.logout} outline info my="2 sm-0">Logout</Button>
                     </Collapse>

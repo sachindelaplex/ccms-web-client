@@ -7,7 +7,7 @@ import 'tachyons';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
-import { DatePicker } from 'antd';
+//import { DatePicker } from 'antd';
 import * as moment from 'moment';
 
 
@@ -17,21 +17,56 @@ class Dashboard extends Component{
         super();
         this.state = {
             cctns_no : '',
-            date : '',
+            //date : '',
             courtArray: [],
+            monthArray:[],
+            currentMonth: '',
+            yearArray:[],
+            currentYear: '',
+            psArray: [],
+            year: '',
+            month: '',
+            police_id : ''
         }
-        this.getAllList();
+        //this.getAllList();
+        this.getPoliceStationList();
+
     }
 
-    
-    getAllList = () =>{
-        axios.get('/court/getAll', {
+    componentWillMount(){
+          //Get months list
+          let months = [];
+          let theMonths = ["January", "February", "March", "April", "May",
+              "June", "July", "August", "September", "October", "November", "December"];
+          for (var i=0; i<12; i++) {
+              months[i] = {
+                  value : i+1,
+                  name : theMonths[i]
+              }
+          }
+          let currMonthName  = moment().format('MMMM');
+          let monthNum = moment().month(currMonthName).format("M");
+          this.state.monthArray = months;
+          this.state.currentMonth = monthNum;
+  
+          //Get years list
+          let years = [];
+          let currYearName  = moment().format('YYYY');
+          for(var y = 2000; y <= 2025; y++) {
+             years[y] = y;
+          }
+          this.state.yearArray = years;
+          this.state.currentYear = currYearName;
+    }
+
+    getPoliceStationList = () =>{
+        axios.get('/court/getAllPoliceStation', {
             "headers": {
                 "Authorization": "Bearer " + localStorage.getItem('token')
             }
           })
         .then((response) =>{
-            this.setState({courtArray: response.data});
+            this.setState({psArray: response.data});
         })
         .catch((err) =>{
             if(err){
@@ -39,6 +74,22 @@ class Dashboard extends Component{
             }
         });
     }
+    
+    // getAllList = () =>{
+    //     axios.get('/court/getAll', {
+    //         "headers": {
+    //             "Authorization": "Bearer " + localStorage.getItem('token')
+    //         }
+    //       })
+    //     .then((response) =>{
+    //         //this.setState({courtArray: response.data});
+    //     })
+    //     .catch((err) =>{
+    //         if(err){
+    //             this.props.history.push('/');
+    //         }
+    //     });
+    // }
  
     logout = ()=>{
         localStorage.removeItem('token');
@@ -46,11 +97,11 @@ class Dashboard extends Component{
         this.props.history.push('/');
     }
 
-    changeDatepickerValue = (date, dateString) =>  {
-        this.setState({
-            date : dateString
-        })
-    }
+    // changeDatepickerValue = (date, dateString) =>  {
+    //     this.setState({
+    //         date : dateString
+    //     })
+    // }
 
     handleForm = (event) =>{
         this.setState({
@@ -59,35 +110,79 @@ class Dashboard extends Component{
     }
 
     searchClick = (event)=>{
+
+        let monthVal;
+        let yearVal;
+        if(this.state.month == '' || this.state.month == undefined){
+            monthVal = this.state.currentMonth
+        } else {
+            monthVal = this.state.month
+        }
+
+        if(this.state.year == '' || this.state.year == undefined){
+            yearVal = this.state.currentYear
+        } else {
+            yearVal = this.state.year
+        }
+        
+
+        let hearing_date = yearVal+'-'+monthVal;
+
         const postData = {
             cctns_no : this.state.cctns_no,
-            created : this.state.date
+            policestation : this.state.police_id,
+            hearing_date : hearing_date
         }
+
         axios.post('/court/filter',postData,{
             "headers": {
                 "Authorization": "Bearer " + localStorage.getItem('token')
             }
         })
         .then((response) =>{
-            //console.log(response)
             this.setState({courtArray: response.data});
-            this.setState({cctns_no : ""})
         })
         .catch((err) =>{
             this.props.history.push('/')
         })
     }
 
-    refesh = (e) =>{
-        this.getAllList();
-    }
+    
 
-    chengedate = (date) => {
+    changedate = (date) => {
         if(date !== '' && date !== null){
             let newdate = moment(date, 'YYYY-MM-DD').format();
             let latestDate = newdate.split("T");
             return latestDate[0];
         }
+    }
+
+    changeMonth = (value) =>{
+        this.setState({month : value})
+    }
+
+    changeYear = (value) =>{
+        this.setState({year : value})
+    }
+
+    changePS = (value) =>{
+        this.setState({police_id : value})
+    }
+
+    refesh = (e) =>{
+        
+        this.setState({
+            courtArray : [],
+            currentYear: this.state.currentYear,
+            currentMonth: this.state.currentMonth,
+            year: this.state.currentYear,
+            month: this.state.currentMonth,
+            cctns_no: "",
+            police_id: "",
+        });
+        console.log(this.state)
+
+        //console.log(this.state)
     }
 
     render(){
@@ -104,13 +199,38 @@ class Dashboard extends Component{
                 <div key={i} className="rowDiv">
                     <div className="cellDiv">{courtarray[i].cctns_no}</div>
                     <div className="cellDiv">{courtarray[i].fir_no}</div>
-                    <div className="cellDiv">{this.chengedate(courtarray[i].date_of_registration)}</div>
+                    <div className="cellDiv">{this.changedate(courtarray[i].date_of_registration)}</div>
                     <div className="cellDiv">
-                        <Link  to={`/view/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/details/${courtarray[i]._id}`}>Edit</Link>
+                        <Link  to={`/view/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/edit/${courtarray[i]._id}`}>Edit</Link>
                     </div>
                 </div>
             )
         });
+
+        //Month list data
+        const montharray = this.state.monthArray;
+        const mListArray = montharray.map((court, i)=>{
+            return (
+                <option key={i} value={montharray[i].value}>{montharray[i].name}</option>
+            )
+        });
+
+        //year list data
+        const yeararray = this.state.yearArray;
+        const yListArray = yeararray.map((court, i)=>{
+            return (
+                <option key={i} value={yeararray[i]}>{yeararray[i]}</option>
+            )
+        });
+
+        //police station list data
+        const psarray = this.state.psArray;
+        const psListArray = psarray.map((court, i)=>{
+            return (
+                <option key={i} value={psarray[i]._id}>{psarray[i].name}</option>
+            )
+        });
+
 
         return(
             <div>
@@ -119,12 +239,26 @@ class Dashboard extends Component{
                         <br/>
                         <Row alignItems="start">
                             
-                            <Col></Col>
                             <Col>
-                                <input type="text" value={this.cctns_no} onChange={this.handleForm} className="form-control input_user" name="cctns_no"  placeholder="CCTNS No"/>
+                                <select  value={this.state.currentMonth}  onChange={(e) => this.changeMonth(e.target.value) }   className="form-control input_user">
+                                <option value="">Select Month</option>
+                                        {mListArray}
+                                </select>
                             </Col>
                             <Col>
-                                <DatePicker onChange={this.changeDatepickerValue} />
+                                <select  value={this.state.currentYear}  onChange={(e) => this.changeYear(e.target.value) }   className="form-control input_user">
+                                <option value="">Select Month</option>
+                                   {yListArray}
+                                </select>
+                            </Col>
+                            <Col>
+                                <select value={this.state.police_id} onChange={(e) => this.changePS(e.target.value) } className="form-control input_user">
+                                    <option value="">Select Police Station</option>
+                                    {psListArray}
+                                </select>
+                            </Col>
+                            <Col>
+                                <input type="text" value={this.state.cctns_no} onChange={this.handleForm} className="form-control input_user" name="cctns_no"  placeholder="CCTNS No"/>
                             </Col>
                             <Col>
                                 <Button primary as="input" onClick={e => this.searchClick(e)} type="submit" value="Search" />
@@ -137,7 +271,6 @@ class Dashboard extends Component{
                         <Row style={rowStyle2} alignItems="start">
                             <Col >
                             <div className="containerDiv">
-
                                     <div className="rowDivHeader">
                                         <div className="cellDivHeader">CCTNS NO</div>
                                         <div className="cellDivHeader">FIR NO</div>
@@ -148,7 +281,7 @@ class Dashboard extends Component{
                              </div>
                             </Col>
                         </Row>
-
+                        
                     </Container>
             </div>
         )
