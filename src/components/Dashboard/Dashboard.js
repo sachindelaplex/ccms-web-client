@@ -175,7 +175,7 @@ class Dashboard extends Component{
                     <div className="cellDiv">{courtarray[i].fir_no}</div>
                     <div className="cellDiv">{this.changedate(courtarray[i].date_of_registration)}</div>
                     <div className="cellDiv">
-                        <Link  to={`/view/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/edit/${courtarray[i]._id}`}>Edit</Link>
+                        <Link  to={`/view/${courtarray[i]._id}`}>View</Link> |  <Link  to={`/details/${courtarray[i]._id}`}>Edit</Link>
                     </div>
                 </div>
             )
