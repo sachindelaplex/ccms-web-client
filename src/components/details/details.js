@@ -7,6 +7,7 @@ import Menu from '../Menu/Menu';
 import { DatePicker } from 'antd';
 import { TimePicker } from 'antd';
 import { Container, Row, Col, Button  } from 'bootstrap-4-react';
+import * as moment from 'moment';
 
 function Details(props,{match}){   
     const [policestationList, setPolicestationList] = useState([]);
@@ -54,12 +55,48 @@ function Details(props,{match}){
                 },
                 params: {
                     id : props.match.params._id
-                }
-              
+                }             
               })
             .then(function(response) {
-              console.log('response ',response.data);
-             
+              console.log('response ',response.data);        
+              let dateofReg = response.data.date_of_registration;
+              let reg =  dateofReg.split('T');
+                 console.log('reg ',reg[0]) 
+                 var dateofRegi = new Date(response.data.date_of_registration);        
+                 dateofRegi.getTime()    
+                 console.log('dateofRegi ',dateofRegi.getTime())
+              setInputs(response.data);
+              setDate_of_registration(response.data.date_of_registration)
+              setTime_of_registration(response.data.time_of_registration)
+              setHearing_date(response.data.hearing_date)
+
+              var action_case_data = response.data.case_action_states[0];
+
+              setDate_of_evidence(action_case_data.evidence.date);
+              setDate_of_statement(action_case_data.statement.date);
+              setDate_of_argument(action_case_data.argument.date);
+              setDate_of_judgement(action_case_data.judgement.date);
+
+              setActioninputs({
+                date_of_evidence : action_case_data.evidence.date,
+                date_of_statement : action_case_data.statement.date,
+                date_of_argument : action_case_data.argument.date,
+                date_of_judgement : action_case_data.judgement.date,
+                witness : action_case_data.evidence.witness,
+                io : action_case_data.evidence.io,
+                punch : action_case_data.evidence.punch,
+                evidenceStatus : action_case_data.evidence.status,
+                statementRemark : action_case_data.statement.remark,
+                statementStatus : action_case_data.statement.status,
+                argumentRemark : action_case_data.argument.remark,
+                argumentStatus : action_case_data.argument.status,
+                judgementRemark : action_case_data.judgement.remark,
+                judgementStatus : action_case_data.judgement.status 
+              })
+
+            //   console.log('inputs.bail ',inputs.bail)
+            //   setDate_of_registration(inputs.date_of_registration)
+
             }).catch(function (error) {
                 console.log('error ',error);
             });   
@@ -89,8 +126,6 @@ function Details(props,{match}){
         pp : '',
         io : '',
         bail_custody_status : '',
-        witness : 'Police',
-        panch : 'Other Panch',
         policestation : '',
         court : '' ,
         judge : '',
@@ -99,6 +134,10 @@ function Details(props,{match}){
     
 
     const [actionInputs, setActioninputs] = useState({
+        date_of_evidence : '',
+        date_of_statement : '',
+        date_of_argument : '',
+        date_of_judgement : '',
         witness : '',
         io : '',
         punch : '',
@@ -120,14 +159,14 @@ function Details(props,{match}){
       ];
 
     const handleInputChange = (e) => {
-        // event.persist();
+        console.log('handleInputChange ',e.target)
         const {name, value} = e.target       
         setInputs({...inputs, [name]: value})
       }
 
       const handleActionChange = (e) => {       
         const {name, value} = e.target       
-        setActioninputs({...inputs, [name]: value})
+        setActioninputs({...actionInputs, [name]: value})
       }
       
 
@@ -151,12 +190,27 @@ function Details(props,{match}){
             pp : '',
             io : '',
             bail_custody_status : '',
-            witness : '',
-            panch : '',
             policestation : '',
             court : '' ,
             judge : '',
-            case_action_states : {}
+            case_action_states : []
+        });
+
+        setActioninputs({
+            date_of_evidence : '',
+            date_of_statement : '',
+            date_of_argument : '',
+            date_of_judgement : '',
+            witness : '',
+            io : '',
+            punch : '',
+            evidenceStatus : '',
+            statementRemark : '',
+            statementStatus : '',
+            argumentRemark : '',
+            argumentStatus : '',
+            judgementRemark : '',
+            judgementStatus : ''
         })
       }
 
@@ -167,7 +221,7 @@ function Details(props,{match}){
         inputs.hearing_date = hearing_date;       
         
 
-        var gridData = {
+        var gridData = [{
             evidence : {
                 date : date_of_evidence,
                 witness : actionInputs.witness,
@@ -190,25 +244,49 @@ function Details(props,{match}){
                 remark : actionInputs.judgementRemark,
                 status : actionInputs.judgementStatus
             }
-        }
+        }]
 
         inputs.case_action_states = gridData;
         
         console.log('now inputs are .....',inputs);
-        // axios.post('/court/save',inputs )
-		// .then(function(response) {
-        //     console.log('response ', response);
-        //     props.history.push('/dashboard');
-        // }).catch(function (error) {
-        //     console.log('error ',error);
-        // });     
+        console.log(JSON.stringify(inputs));
+
+        if(props.match.params._id != undefined){
+            inputs["id"] = props.match.params._id;
+            console.log('inputs["id"] ',inputs );
+            axios.put('/court/update',inputs,{
+                "headers": {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                }
+            })
+            .then(function(response) {
+                console.log('response ', response);
+                props.history.push('/dashboard');
+            }).catch(function (error) {
+                console.log('error ',error);
+            });    
+        }
+        else{
+            axios.post('/court/save',inputs,{
+                "headers": {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                }
+            })
+            .then(function(response) {
+                console.log('response ', response);
+                props.history.push('/dashboard');
+            }).catch(function (error) {
+                console.log('error ',error);
+            });    
+        }
+        
       }
 
      return (
         <React.Fragment>
             <div class="col-md-11 col-sm-10">
 					<div class=" login-field page-title">
-						<h1>Details</h1>
+						<h1>Details {inputs.date_of_registration}</h1>
 			        </div>          
 					<div id="login-row" class="col-md-12">
 							<div id="login-column">
@@ -234,45 +312,49 @@ function Details(props,{match}){
 												<div class="form-group login-field">
 													<label>CC/RCC No</label><br/>
 													<input type="text" class="form-control" name="cc_rcc_no" value={inputs.cc_rcc_no} onChange={handleInputChange} required/>
-													{/* <div class="validation-msg"></div> */}
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Date of Registration</label><br/>                    
-													<DatePicker name="date_of_registration" onChange={(date, dateString) => {setDate_of_registration(dateString)}} required/> 
-                                                    {/* <input type="text" name="" id="" class="form-control"/> */}
+                                                    <DatePicker name="date_of_registration" onChange={(date, dateString) => {setDate_of_registration(dateString)}} required 
+                                                    //    defaultValue={moment(date_of_registration,'YYYY/MM/DD')}
+
+                                                     value={moment(date_of_registration,'YYYY/MM/DD')}
+
+                                                     />                                                   
 													<div class="validation-msg"></div>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Time of Registration</label><br/>
-													<TimePicker name="time_of_registration" onChange={(date, timeString) => {setTime_of_registration(timeString)}} required/>
-                                                    {/* <input type="text" name="" id="" class="form-control"/>
-													<div class="validation-msg"></div> */}
+                                                    <TimePicker name="time_of_registration" 
+                                                    onChange={(date, timeString) => {setTime_of_registration(timeString)}} 
+                                                    required 
+                                                    // defaultValue={moment(inputs.time_of_registration,'HH:mm:ss')}
+                                                    value={moment(time_of_registration,'HH:mm:ss')}
+                                                    />    
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Police Station</label><br/>
-                                                    <select class="custom-select" name="policestation" value={inputs.policestation} onChange={handleInputChange} required>
-                                                    <option  value="">Select Police Station</option>
+                                                    <select class="custom-select" name="policestation"  onChange={handleInputChange} required >
+                                                    <option value="">Select Police Station</option>
                                                     {policestationList.map( (item, i) => (
-                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    <option key={i} selected={inputs.policestation._id == item._id} value={item._id}>{item.name}</option>
                                                     ) )}
                                                     </select>
-													{/* <input type="text" name="" id="" class="form-control"/>
-													<div class="validation-msg"></div> */}
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Court</label><br/>
-                                                    <select class="custom-select" name="court" value={inputs.court} onChange={handleInputChange} required>
+                                                    <select class="custom-select" name="court" onChange={handleInputChange} required>
                                                     <option  value="">Select Court</option>
                                                     {courtList.map( (item, i) => (
-                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    <option key={i} selected={inputs.court._id == item._id} value={item._id}>{item.name}</option>
                                                     ) )}
                                                     </select>
 													{/* <div class="validation-msg"></div> */}
@@ -281,10 +363,10 @@ function Details(props,{match}){
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Judge</label><br/>
-                                                    <select class="custom-select" name="judge" value={inputs.judge} onChange={handleInputChange} required>
+                                                    <select class="custom-select" name="judge" onChange={handleInputChange} required>
                                                     <option  value="">Select Judge</option>
                                                     {judgeList.map( (item, i) => (
-                                                    <option key={i} value={item._id}>{item.name}</option>
+                                                    <option key={i} selected={inputs.judge._id == item._id} value={item._id}>{item.name}</option>
                                                     ) )}
                                                     </select>
 													{/* <div class="validation-msg"></div> */}
@@ -293,8 +375,13 @@ function Details(props,{match}){
                                             <div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Hearing Date</label><br/>
-                                                    <DatePicker name="hearing_date" onChange={(date, dateString) => {setHearing_date(dateString)}} required/>
-													{/* <div class="validation-msg"></div> */}
+                                                    <DatePicker name="hearing_date" onChange={(date, dateString) => {setHearing_date(dateString)}} required 
+                                                        // defaultValue={moment(inputs.hearing_date)}
+
+                                                    value={moment(hearing_date)}
+
+
+                                                    />	
 												</div>
 											</div>
 										</div>
@@ -486,22 +573,34 @@ function Details(props,{match}){
 <Col>
 <div><h5><b>Date</b></h5></div>
 <br></br>
-<div><DatePicker name="date_of_evidence" onChange={(date, dateString) => {setDate_of_evidence(dateString)}} required/> </div>
+<div><DatePicker name="date_of_evidence" onChange={(date, dateString) => {setDate_of_evidence(dateString)}} required 
+// defaultValue={moment(actionInputs.date_of_evidence)}
+value={moment(date_of_evidence)}
+/> </div>
 <br></br>
 <br></br>
 <br></br>
 <br></br>
 <br></br>
 <br></br>
-<div><DatePicker name="date_of_statement" onChange={(date, dateString) => {setDate_of_statement(dateString)}} required/></div>
+<div><DatePicker name="date_of_statement" onChange={(date, dateString) => {setDate_of_statement(dateString)}} required 
+// defaultValue={moment(actionInputs.date_of_statement)} 
+value={moment(date_of_statement)} 
+/></div>
 <br></br>
 <br></br>
 <br></br>
-<div><DatePicker name="date_of_argument" onChange={(date, dateString) => {setDate_of_argument(dateString)}} required/></div>
+<div><DatePicker name="date_of_argument" onChange={(date, dateString) => {setDate_of_argument(dateString)}} required 
+// defaultValue={moment(actionInputs.date_of_argument)} 
+value={moment(date_of_argument)} 
+/></div>
 <br></br>
 <br></br>
 <br></br>
-<div><DatePicker name="date_of_judgement" onChange={(date, dateString) => {setDate_of_judgement(dateString)}} required/></div>
+<div><DatePicker name="date_of_judgement" onChange={(date, dateString) => {setDate_of_judgement(dateString)}} required 
+// defaultValue={moment(actionInputs.date_of_judgement)} 
+value={moment(date_of_judgement)} 
+/></div>
 </Col>
 <Col>
 <div><h5><b>Type Of Action</b></h5></div>
