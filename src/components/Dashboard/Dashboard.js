@@ -240,13 +240,13 @@ class Dashboard extends Component{
                         <Row alignItems="start">
                             
                             <Col>
-                                <select  value={this.state.currentMonth}  onChange={(e) => this.changeMonth(e.target.value) }   className="form-control input_user">
+                                <select  defaultValue={this.state.currentMonth}  onChange={(e) => this.changeMonth(e.target.value) }   className="form-control input_user">
                                 <option value="">Select Month</option>
                                         {mListArray}
                                 </select>
                             </Col>
                             <Col>
-                                <select  value={this.state.currentYear}  onChange={(e) => this.changeYear(e.target.value) }   className="form-control input_user">
+                                <select  defaultValue={this.state.currentYear}  onChange={(e) => this.changeYear(e.target.value) }   className="form-control input_user">
                                 <option value="">Select Month</option>
                                    {yListArray}
                                 </select>
