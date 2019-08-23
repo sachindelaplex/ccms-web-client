@@ -48,13 +48,14 @@ function Details(props,{match}){
         
         if(props.match.params._id != undefined)
         {
-            axios.get('/court/getCourt/',  {
-                "headers": {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
+            axios.get('/court/getCourt',  {
+                headers: {
+                      "Authorization": "Bearer " + localStorage.getItem('token')                    
                 },
-                "params" : {
+                params: {
                     id : props.match.params._id
                 }
+              
               })
             .then(function(response) {
               console.log('response ',response.data);
