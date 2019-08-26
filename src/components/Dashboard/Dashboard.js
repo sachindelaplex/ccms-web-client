@@ -76,11 +76,11 @@ class Dashboard extends Component{
         });
     }
    
-    logout = ()=>{
-        localStorage.removeItem('token');
-        localStorage.removeItem('id');
-        this.props.history.push('/');
-    }
+    // logout = ()=>{
+    //     localStorage.removeItem('token');
+    //     localStorage.removeItem('id');
+    //     this.props.history.push('/');
+    // }
 
     handleForm = (event) =>{
         this.setState({
@@ -181,6 +181,7 @@ class Dashboard extends Component{
             )
         });
 
+
         //Month list data
         const montharray = this.state.monthArray;
         const mListArray = montharray.map((court, i)=>{
@@ -208,7 +209,7 @@ class Dashboard extends Component{
 
         return(
             <div>
-                  <Menu logout={this.logout}/>
+                  <Menu/>
                     <Container>
                         <br/>
                         <Row alignItems="start">
@@ -244,15 +245,18 @@ class Dashboard extends Component{
                         <br/>
                         <Row style={rowStyle2} alignItems="start">
                             <Col >
-                            <div className="containerDiv">
-                                    <div className="rowDivHeader">
-                                        <div className="cellDivHeader">CCTNS NO</div>
-                                        <div className="cellDivHeader">FIR NO</div>
-                                        <div className="cellDivHeader">Registration Date</div>
-                                        <div className="cellDivHeader">Action</div>
-                                    </div>
-                                    {courtListArray}
-                             </div>
+                                {courtListArray.length == 0 ? null  : 
+                                    <div   className="containerDiv">
+                                        <div className="rowDivHeader">
+                                            <div className="cellDivHeader">CCTNS NO</div>
+                                            <div className="cellDivHeader">FIR NO</div>
+                                            <div className="cellDivHeader">Registration Date</div>
+                                            <div className="cellDivHeader">Action</div>
+                                        </div>
+                                        {courtListArray}
+                                    </div> 
+                                }
+                                
                             </Col>
                         </Row>
                         

@@ -1,9 +1,23 @@
+
 import React, {Component} from 'react';
 import './Menu.css';
 import {Link} from 'react-router-dom';
 import { Navbar, Button, Collapse } from 'bootstrap-4-react';
+import {Redirect} from 'react-router-dom';
 
 class Menu extends Component{
+    constructor(props){
+    super(props)
+    this.state = {redirect : false}
+    }
+    
+   
+    logout = ()=>{
+        this.setState({redirect : true})
+        console.log('logout')
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+    }
 
     render(){
 
@@ -19,11 +33,17 @@ class Menu extends Component{
             marginRight: '1050px',
         }
 
+        if (this.state.redirect) {
+            return (<Redirect push to="/" />)
+        };
+    
+
+
         return(
             <div>
                 <React.Fragment>
                     <Navbar expand="lg" dark bg="dark" mb="3">
-                    {/* <Navbar.Brand href="#">Welcome to the dashboard {this.props.name} !</Navbar.Brand> */}
+                    
                     <Navbar.Toggler target="#navbarColor1" />
                     <Collapse navbar id="navbarColor1">
                         <Navbar.Nav mr="auto">
@@ -33,7 +53,10 @@ class Menu extends Component{
                         <Navbar.Nav mr="auto">
                             <Link style={navbars1}  to="/details">Add Details</Link>
                         </Navbar.Nav>
-                        <Button onClick={this.props.logout} outline info my="2 sm-0">Logout</Button>
+                        {/* <Navbar.Nav mr="auto">
+                            <Link style={navbars1} outline info my="2 sm-0" to="/" onClick={this.logout}>Logout</Link>
+                        </Navbar.Nav> */}
+                        <Button onClick={() => this.logout()} outline info my="2 sm-0">Logout</Button>
                     </Collapse>
                     </Navbar>
                 </React.Fragment>
@@ -42,4 +65,5 @@ class Menu extends Component{
     }
 
 }
+
 export default Menu;

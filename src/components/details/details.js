@@ -294,6 +294,7 @@ function Details(props,{match}){
 
      return (
         <React.Fragment>
+            <Menu/>
             <div class="col-md-12 col-sm-10">
                 <div class="boxStyle">
 					<div class=" login-field page-title">
