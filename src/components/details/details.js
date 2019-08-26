@@ -24,10 +24,11 @@ function Details(props,{match}){
 
     const rowStyle = {
         height: '500px',
-        backgroundColor: '#fff',
-        marginTop: '1rem',
-        border:'2px solid darkgrey',
-        position:'relative'
+        backgroundColor: '#f1f1f1',
+        // marginTop: '1rem',
+        border:'1px solid #ccc',
+        position:'relative',
+        paddingTop: '8px'
         };
 
     useEffect(() => {       
@@ -293,16 +294,17 @@ function Details(props,{match}){
 
      return (
         <React.Fragment>
-            <div class="col-md-11 col-sm-10">
+            <div class="col-md-12 col-sm-10">
+                <div class="boxStyle">
 					<div class=" login-field page-title">
-						<h1>Details</h1>
+						<h1>Case Details</h1>
 			        </div>          
 					<div id="login-row" class="col-md-12">
 							<div id="login-column">
 								<div class="login-box">
 									<form id="login-form" class="form" onSubmit={(e) => submit(e)}>
                                         <label class="group-label">Case Basic Info</label>
-                                        <div class="row">                                        
+                                        <div class="row innerBox">                                        
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>CCTNS No</label><br/>
@@ -396,7 +398,7 @@ function Details(props,{match}){
 										</div>
 										<br/>
                                         <label class="group-label">Complaint</label>
-                                        <div class="row">                                       
+                                        <div class="row innerBox">                                       
 											<div class="col-md-12">
 												<div class="form-group login-field">
 													{/* <label>Complaint</label><br/> */}
@@ -407,7 +409,7 @@ function Details(props,{match}){
 										</div>
                                         <br/>
                                         <label class="group-label">Accused</label>
-                                        <div class="row">                                       
+                                        <div class="row innerBox">                                       
 											<div class="col-md-12">
 												<div class="form-group login-field">
 													{/* <label>Accused</label><br/> */}
@@ -417,7 +419,7 @@ function Details(props,{match}){
 										</div>
                                         <br/>
                                         <label class="group-label">Bail/Custody</label>
-                                        <div class="row">                                       
+                                        <div class="row innerBox">                                       
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Bail</label><br/>
@@ -456,7 +458,7 @@ function Details(props,{match}){
 
                                         <br/>
                                         <label class="group-label">Muddemaal</label>
-                                        <div class="row">                                       
+                                        <div class="row innerBox">                                       
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Forensic</label><br/>
@@ -477,7 +479,7 @@ function Details(props,{match}){
 										</div>
                                         <br/>
                                         <label class="group-label">Forensic Reports</label>
-                                        <div class="row">                                       
+                                        <div class="row innerBox">                                       
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>CA Report</label><br/>
@@ -514,7 +516,7 @@ function Details(props,{match}){
 										</div>
                                         <br/>
                                         <label class="group-label">Manpower</label>
-                                        <div class="row">                                        
+                                        <div class="row innerBox">                                        
 											<div class="col-md-4">
 												<div class="form-group login-field">
 													<label>Pairani Name</label><br/>
@@ -575,9 +577,10 @@ function Details(props,{match}){
 
 
 
-                                        <Row>
+                                        {/* <Row>
 <div><h5><b>Case Action Dates</b></h5></div>
-</Row>
+</Row> */}
+<label class="group-label">Case Action Dates</label>
 <Row style={rowStyle} alignItems="start">
 <Col>
 <div><h5><b>Date</b></h5></div>
@@ -721,25 +724,7 @@ value={moment(date_of_judgement)}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                        <br/><br/>
 										<div class="row">
 											<div class="col-md-6 txtRight">
 												<div class="form-group login-field">
@@ -757,6 +742,7 @@ value={moment(date_of_judgement)}
 								</div>
 							</div>
 						</div>
+                        </div>
 					</div>
 				
         </React.Fragment>

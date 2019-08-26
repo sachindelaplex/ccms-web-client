@@ -2,3 +2,14 @@
     text-align: right;
 }
 
+.boxStyle{
+    padding: 15px;
+    border: 1px solid #ced4da;
+    margin: 15px 0
+}
+
+.innerBox{
+    padding: 5px 0 0 0;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
