@@ -13,14 +13,14 @@ function Details(props,{match}){
     const [policestationList, setPolicestationList] = useState([]);
     const [courtList, setCourtList] = useState([]);
     const [judgeList, setJudgeList] = useState([]);
-    const [date_of_registration, setDate_of_registration] = useState('');
-    const [time_of_registration, setTime_of_registration] = useState('');
-    const [hearing_date, setHearing_date] = useState('');
+    const [date_of_registration, setDate_of_registration] = useState(new Date());
+    const [time_of_registration, setTime_of_registration] = useState('00:00:00');
+    const [hearing_date, setHearing_date] = useState(new Date());
 
-    const [date_of_evidence, setDate_of_evidence] = useState('');
-    const [date_of_statement, setDate_of_statement] = useState('');
-    const [date_of_argument, setDate_of_argument] = useState('');
-    const [date_of_judgement, setDate_of_judgement] = useState('');
+    const [date_of_evidence, setDate_of_evidence] = useState(new Date());
+    const [date_of_statement, setDate_of_statement] = useState(new Date());
+    const [date_of_argument, setDate_of_argument] = useState(new Date());
+    const [date_of_judgement, setDate_of_judgement] = useState(new Date());
 
     const rowStyle = {
         height: '500px',
@@ -212,6 +212,15 @@ function Details(props,{match}){
             judgementRemark : '',
             judgementStatus : ''
         })
+
+        setDate_of_registration(new Date())
+        setTime_of_registration('00:00:00')
+        setHearing_date(new Date())    
+
+        setDate_of_evidence(new Date());
+        setDate_of_statement(new Date());
+        setDate_of_argument(new Date());
+        setDate_of_judgement(new Date());
       }
 
       const submit = (e) => { 
@@ -286,7 +295,7 @@ function Details(props,{match}){
         <React.Fragment>
             <div class="col-md-11 col-sm-10">
 					<div class=" login-field page-title">
-						<h1>Details {inputs.date_of_registration}</h1>
+						<h1>Details</h1>
 			        </div>          
 					<div id="login-row" class="col-md-12">
 							<div id="login-column">
