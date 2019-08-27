@@ -11,8 +11,9 @@ function App() {
     <BrowserRouter>
     <div>
       <Switch>
-        <Route exact path="/" component={Login} />   
-        <Route exact path="/details/:_id?" component={Details} />      
+        <Route exact path="/" component={Login} />         
+        <Route key="addDetails" exact path="/addDetails" component={Details} />   
+        <Route key="details/:_id" exact path="/details/:_id" component={Details} />      
         <Route exact path="/dashboard" component={Dashboard} />  
         <Route exact path="/view/:_id" component={View} />  
       </Switch>

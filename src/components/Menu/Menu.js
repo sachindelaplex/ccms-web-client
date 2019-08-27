@@ -3,12 +3,12 @@ import React, {Component} from 'react';
 import './Menu.css';
 import {Link} from 'react-router-dom';
 import { Navbar, Button, Collapse } from 'bootstrap-4-react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, NavLink} from 'react-router-dom';
 
 class Menu extends Component{
     constructor(props){
     super(props)
-    this.state = {redirect : false}
+    this.state = {redirect : false};
     }
     
    
@@ -38,7 +38,6 @@ class Menu extends Component{
         };
     
 
-
         return(
             <div>
                 <React.Fragment>
@@ -51,7 +50,7 @@ class Menu extends Component{
                         </Navbar.Nav>
 
                         <Navbar.Nav mr="auto">
-                            <Link style={navbars1}  to="/details">Add Details</Link>
+                            <Link style={navbars1} to="/addDetails">Add Details</Link>
                         </Navbar.Nav>
                         {/* <Navbar.Nav mr="auto">
                             <Link style={navbars1} outline info my="2 sm-0" to="/" onClick={this.logout}>Logout</Link>

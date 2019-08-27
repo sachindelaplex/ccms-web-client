@@ -21,6 +21,7 @@ function Details(props,{match}){
     const [date_of_statement, setDate_of_statement] = useState(new Date());
     const [date_of_argument, setDate_of_argument] = useState(new Date());
     const [date_of_judgement, setDate_of_judgement] = useState(new Date());
+    const [redirectDetails, setRedirectDetails] = useState(false);
 
     const rowStyle = {
         height: '500px',
@@ -30,9 +31,62 @@ function Details(props,{match}){
         position:'relative',
         paddingTop: '8px'
         };
+        
+
+        const [inputs, setInputs] = useState({
+            cctns_no : '',
+            fir_no : '',
+            cc_rcc_no : '',
+            date_of_registration : '',
+            time_of_registration : '',
+            complaints : '',
+            accused : '',
+            hearing_date : '',
+            bail : '',
+            custody : '',
+            forensic : '',
+            ca_report : '',
+            dna_report : '',
+            handwriting_report : '',
+            pairani : '',
+            pp : '',
+            io : '',
+            bail_custody_status : '',
+            policestation : '',
+            court : '' ,
+            judge : '',
+            case_action_states : {}
+        });
+        
+    
+        const [actionInputs, setActioninputs] = useState({
+            date_of_evidence : '',
+            date_of_statement : '',
+            date_of_argument : '',
+            date_of_judgement : '',
+            witness : '',
+            io : '',
+            punch : '',
+            evidenceStatus : '',
+            statementRemark : '',
+            statementStatus : '',
+            argumentRemark : '',
+            argumentStatus : '',
+            judgementRemark : '',
+            judgementStatus : ''
+        });
+    
+        const [ps, setPS] = useState(null);
+     
+        const options = [
+            { value: 'Yes', label: 'Yes' },
+            { value: 'No', label: 'No' },
+            { value: 'Not Available', label: 'Not Available'}
+          ];
+
+
 
     useEffect(() => {       
-
         console.log('param id ',props.match.params._id)
         axios.get('/court/getRegistation', {
             "headers": {
@@ -101,63 +155,10 @@ function Details(props,{match}){
             }).catch(function (error) {
                 console.log('error ',error);
             });   
+        }else{
+            console.log('no id ');
         }
-
-
     },[]);
-
-
-    // console.log('details page');
-    const [inputs, setInputs] = useState({
-        cctns_no : '',
-        fir_no : '',
-        cc_rcc_no : '',
-        date_of_registration : '',
-        time_of_registration : '',
-        complaints : '',
-        accused : '',
-        hearing_date : '',
-        bail : '',
-        custody : '',
-        forensic : '',
-        ca_report : '',
-        dna_report : '',
-        handwriting_report : '',
-        pairani : '',
-        pp : '',
-        io : '',
-        bail_custody_status : '',
-        policestation : '',
-        court : '' ,
-        judge : '',
-        case_action_states : {}
-    });
-    
-
-    const [actionInputs, setActioninputs] = useState({
-        date_of_evidence : '',
-        date_of_statement : '',
-        date_of_argument : '',
-        date_of_judgement : '',
-        witness : '',
-        io : '',
-        punch : '',
-        evidenceStatus : '',
-        statementRemark : '',
-        statementStatus : '',
-        argumentRemark : '',
-        argumentStatus : '',
-        judgementRemark : '',
-        judgementStatus : ''
-    });
-
-    const [ps, setPS] = useState(null);
- 
-    const options = [
-        { value: 'Yes', label: 'Yes' },
-        { value: 'No', label: 'No' },
-        { value: 'Not Available', label: 'Not Available'}
-      ];
 
     const handleInputChange = (e) => {
         console.log('handleInputChange ',e.target)
