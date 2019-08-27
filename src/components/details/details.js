@@ -160,8 +160,7 @@ function Details(props,{match}){
         }
     },[]);
 
-    const handleInputChange = (e) => {
-        console.log('handleInputChange ',e.target)
+    const handleInputChange = (e) => {        
         const {name, value} = e.target       
         setInputs({...inputs, [name]: value})
       }
@@ -272,6 +271,7 @@ function Details(props,{match}){
             })
             .then(function(response) {
                 console.log('response ', response);
+                alert('Data Saved Successfully!')
                 props.history.push('/dashboard');
             }).catch(function (error) {
                 console.log('error ',error);
@@ -285,6 +285,7 @@ function Details(props,{match}){
             })
             .then(function(response) {
                 console.log('response ', response);
+                alert('Data Saved Successfully!')
                 props.history.push('/dashboard');
             }).catch(function (error) {
                 console.log('error ',error);

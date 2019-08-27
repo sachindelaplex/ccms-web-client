@@ -15,12 +15,19 @@ function Login(props){
 		e.preventDefault();
 		axios.post('/user/login', {name:username, password:password})
 		.then(function(response) {
-			localStorage.setItem('token',response.data.token);
-			localStorage.setItem('id',response.data.id);
-			props.history.push('/dashboard');
-        }).catch(function (error) {
-            console.log('error ',error);
-        });     
+			if(response.data.status === 200){
+				console.log('response ',response)
+				localStorage.setItem('token',response.data.token);
+				localStorage.setItem('id',response.data.id);
+				props.history.push('/dashboard');
+			}
+			else if(response.data.status === 401){
+				alert(response.data.err);
+			}
+
+		}).catch(function (err) {
+			console.log('error ',err);
+		}); 				          
     }
 
      return (
