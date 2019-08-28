@@ -119,7 +119,11 @@ class Dashboard extends Component{
             }
         })
         .then((response) =>{
-            this.setState({courtArray: response.data});
+            console.log('response ',response.data)
+            this.setState({courtArray: response.data},
+                () => {
+                    if(response.data.length == 0) alert('No any Record')
+                });                      
         })
         .catch((err) =>{
             this.props.history.push('/')
